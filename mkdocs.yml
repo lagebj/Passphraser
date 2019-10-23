@@ -1,0 +1,9 @@
+﻿site_name: Passphraser
+repo_url: https://github.com/lagebj/Passphraser
+theme: readthedocs
+pages:
+  - Home: index.md
+  - Passphraser Basics:
+    - What is Passphraser: about.md
+    - Quick Start: Quick-Start-Installation-and-Example.md
+  - Acknowledgements: acknowledgements.md
