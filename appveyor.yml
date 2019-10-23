@@ -19,4 +19,4 @@ build: off
 
 #Kick off the CI/CD pipeline
 test_script:
-  - ps: . .\build\Passphraser.Build.ps1
+  - ps: . .\build\Invoke-Build.ps1
