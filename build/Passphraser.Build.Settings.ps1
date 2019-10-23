@@ -1,0 +1,137 @@
+Properties {
+    # The root directories for the module's docs, src and test.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ModuleRootDir = Split-Path $PSScriptRoot
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $DocsRootDir = "$ModuleRootDir\docs"
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $TestRootDir = "$ModuleRootDir\tests"
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ScriptsRootDir = "$ModuleRootDir\scripts"
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ModuleName = 'Passphraser'
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $DefaultLocale = 'en-US'
+
+    # ------------------ Script analysis properties ---------------------------
+    # Enable/disable use of PSScriptAnalyzer to perform script analysis.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ScriptAnalysisEnabled = $true
+
+    # When PSScriptAnalyzer is enabled, control which severity level will generate a build failure.
+    # Valid values are Error, Warning, Information and None.  "None" will report errors but will not
+    # cause a build failure.  "Error" will fail the build only on diagnostic records that are of
+    # severity error.  "Warning" will fail the build on Warning and Error diagnostic records.
+    # "Any" will fail the build on any diagnostic record, regardless of severity.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    [ValidateSet('Error', 'Warning', 'Any', 'None')]
+    $ScriptAnalysisFailBuildOnSeverityLevel = 'Error'
+
+    # Path to the PSScriptAnalyzer settings file.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ScriptAnalyzerSettingsPath = "$PSScriptRoot\ScriptAnalyzerSettings.psd1"
+
+    # ------------------- Script signing properties ---------------------------
+
+    # Set to $true if you want to sign your scripts. You will need to have a code-signing certificate.
+    # You can specify the certificate's subject name below. If not specified, you will be prompted to
+    # provide either a subject name or path to a PFX file.  After this one time prompt, the value will
+    # saved for future use and you will no longer be prompted.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $ScriptSigningEnabled = $false
+
+    # Specify the Subject Name of the certificate used to sign your scripts.  Leave it as $null and the
+    # first time you build, you will be prompted to enter your code-signing certificate's Subject Name.
+    # This variable is used only if $SignScripts is set to $true.
+    #
+    # This does require the code-signing certificate to be installed to your certificate store.  If you
+    # have a code-signing certificate in a PFX file, install the certificate to your certificate store
+    # with the command below. You may be prompted for the certificate's password.
+    #
+    # Import-PfxCertificate -FilePath .\myCodeSigingCert.pfx -CertStoreLocation Cert:\CurrentUser\My
+    #
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CertSubjectName = $null
+
+    # Certificate store path.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CertPath = "Cert:\"
+
+    # -------------------- File catalog properties ----------------------------
+
+    # Enable/disable generation of a catalog (.cat) file for the module.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CatalogGenerationEnabled = $true
+
+    # Select the hash version to use for the catalog file: 1 for SHA1 (compat with Windows 7 and
+    # Windows Server 2008 R2), 2 for SHA2 to support only newer Windows versions.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CatalogVersion = 2
+
+    # ---------------------- Testing properties -------------------------------
+
+    # Enable/disable Pester code coverage reporting.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CodeCoverageEnabled = $true
+
+    # CodeCoverageFiles specifies the files to perform code coverage analysis on. This property
+    # acts as a direct input to the Pester -CodeCoverage parameter, so will support constructions
+    # like the ones found here: https://github.com/pester/Pester/wiki/Code-Coverage.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $CodeCoverageFiles = "$ScriptsRootDir\*.ps1", "$ModuleRootDir\*.psm1"
+
+    # ----------------------- Misc properties ---------------------------------
+
+    # In addition, PFX certificates are supported in an interactive scenario only,
+    # as a way to import a certificate into the user personal store for later use.
+    # This can be provided using the CertPfxPath parameter. PFX passwords will not be stored.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $SettingsPath = "$env:LOCALAPPDATA\$ModuleName\SecuredBuildSettings.clixml"
+
+    # Specifies an output file path to send to Invoke-Pester's -OutputFile parameter.
+    # This is typically used to write out test results so that they can be sent to a CI
+    # system like GitLab CI or similar.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $TestOutputFile = "$TestRootDir\Output\$ModuleName.Tests.xml"
+
+    # Specifies the test output format to use when the TestOutputFile property is given
+    # a path.  This parameter is passed through to Invoke-Pester's -OutputFormat parameter.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
+    $TestOutputFormat = "NUnitXml"
+}
+
+###############################################################################
+# Customize these tasks for performing operations before and/or after file staging.
+###############################################################################
+
+# Executes before the StageFiles task.
+Task BeforeStageFiles {
+}
+
+# Executes after the StageFiles task.
+Task AfterStageFiles {
+}
+
+###############################################################################
+# Customize these tasks for performing operations before and/or after Build.
+###############################################################################
+
+# Executes before the BeforeStageFiles phase of the Build task.
+Task BeforeBuild {
+}
+
+# Executes after the Build task.
+Task AfterBuild {
+}
+
+###############################################################################
+# Customize these tasks for performing operations before and/or after BuildHelp.
+###############################################################################
+
+# Executes before the BuildHelp task.
+Task BeforeBuildHelp {
+}
+
+# Executes after the BuildHelp task.
+Task AfterBuildHelp {
+}
