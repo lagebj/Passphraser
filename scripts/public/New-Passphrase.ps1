@@ -27,16 +27,25 @@
         [Parameter(
             HelpMessage = 'Include an uppercase word')]
         [switch]
-        $IncludeUppercase
+        $IncludeUppercase,
+        [Parameter(
+            HelpMessage = 'Include special characters')]
+        [switch]
+        $IncludeSpecials,
+        [Parameter(
+            HelpMessage = 'Amount of special characters to include')]
+        [int]
+        $AmountOfSpecials = 1
     )
     $ErrorActionPreference = 'Stop'
     $InformationPreference = 'Continue'
-    # Load common variables
-    $Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
-    # Set query
     try {
-        [string]$PasswordString = (
-            $Words |
+        [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
+        [char[]]$SpecialCharacters = '!"#$%&()*+,-./:;<=>?@\^_{|}' |
+            ForEach-Object {
+                [char[]]$_
+            }
+        [string]$PasswordString = ($Words |
             Get-Random -Count $AmountOfWords -ErrorAction SilentlyContinue
         ) -join $Separator
         if ($IncludeUppercase) {
@@ -64,6 +73,26 @@
                 [string]$PasswordString = $PasswordString.Replace(
                     $Word,
                     $WordWithNumber
+                )
+            }
+        }
+        if ($IncludeSpecials) {
+            for ($i = 1; $i -le $AmountOfSpecials; $i++) {
+                [char[]]$Special = $SpecialCharacters |
+                    Get-Random
+                [string]$Word = $PasswordString.Split($Separator) |
+                    Get-Random
+                [int]$Placement = @(
+                    0,
+                    $Word.Length
+                ) | Get-Random
+                [string]$WordWithSpecial = $Word.Insert(
+                    $Placement,
+                    $Special
+                )
+                [string]$PasswordString = $PasswordString.Replace(
+                    $Word,
+                    $WordWithSpecial
                 )
             }
         }

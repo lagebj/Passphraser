@@ -1460,7 +1460,6 @@
     "juice",
     "jump",
     "K",
-    "",
     "kettle",
     "key",
     "kick",
