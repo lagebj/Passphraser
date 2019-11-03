@@ -11,28 +11,36 @@
         $AmountOfWords = 3,
         [Parameter(
             Mandatory = $false,
+            Position = 3,
             HelpMessage = 'Separator to use between words')]
         [ValidateNotNullOrEmpty()]
         [string]
         $Separator = " ",
         [Parameter(
+            Mandatory = $false,
             HelpMessage = 'Includes numbers')]
         [switch]
         $IncludeNumbers,
         [Parameter(
+            Mandatory = $false,
+            Position = 1,
             HelpMessage = 'Amount of numbers to include')]
         [ValidateNotNullOrEmpty()]
         [int]
         $AmountOfNumbers = 1,
         [Parameter(
+            Mandatory = $false,
             HelpMessage = 'Include an uppercase word')]
         [switch]
         $IncludeUppercase,
         [Parameter(
+            Mandatory = $false,
             HelpMessage = 'Include special characters')]
         [switch]
         $IncludeSpecials,
         [Parameter(
+            Mandatory = $false,
+            Position = 2,
             HelpMessage = 'Amount of special characters to include')]
         [int]
         $AmountOfSpecials = 1
@@ -46,7 +54,7 @@
                 [char[]]$_
             }
         [string]$PasswordString = ($Words |
-            Get-Random -Count $AmountOfWords -ErrorAction SilentlyContinue
+            Get-Random -Count $AmountOfWords
         ) -join $Separator
         if ($IncludeUppercase) {
             [string]$Word = $PasswordString.Split($Separator) |
