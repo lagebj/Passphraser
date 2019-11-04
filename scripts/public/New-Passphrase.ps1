@@ -48,7 +48,7 @@
     $ErrorActionPreference = 'Stop'
     $InformationPreference = 'Continue'
     try {
-        [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
+        [System.Collections.Generic.List[string]]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
         [char[]]$SpecialCharacters = '!"#$%&()*+,-./:;<=>?@\^_{|}' |
             ForEach-Object {
                 [char[]]$_
