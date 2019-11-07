@@ -91,7 +91,7 @@ Properties {
     # provide either a subject name or path to a PFX file.  After this one time prompt, the value will
     # saved for future use and you will no longer be prompted.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ScriptSigningEnabled = $false
+    $ScriptSigningEnabled = $true
 
     # Specify the Subject Name of the certificate used to sign your scripts.  Leave it as $null and the
     # first time you build, you will be prompted to enter your code-signing certificate's Subject Name.

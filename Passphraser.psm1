@@ -9,11 +9,11 @@ foreach ($folder in @(
         if (Test-Path -Path $root) {
             $files = Get-ChildItem -Path $root -Filter *.ps1 -Recurse
             $files | Where-Object {
-                    $_.name -NotLike '*.Tests.ps1'
-                } | ForEach-Object {
-                    . $_.FullName
-                }
+                $_.name -NotLike '*.Tests.ps1'
+            } | ForEach-Object {
+                . $_.FullName
+            }
         }
     }
 
-Export-ModuleMember -function (Get-ChildItem -Path "$PSScriptRoot\scripts\public\*.ps1").basename
+Export-ModuleMember -Function (Get-ChildItem -Path "$PSScriptRoot\scripts\public\*.ps1").basename
