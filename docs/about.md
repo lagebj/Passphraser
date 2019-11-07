@@ -1,5 +1,6 @@
 # What is Passphraser
 
-Powershell passphrase generator for lazy admins
+In short: A Powershell passphrase generator authored by me, Lage Berger Jensen. There is not much else to say really.
 
-Authored by Lage Berger Jensen
+Passphraser contains one function; New-Passphrase. New-Passphrase returns a random passphrase as a string that you can easily pipe to e.g. "clip".
+See "How to use Passphraser" for examples.
