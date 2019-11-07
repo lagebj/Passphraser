@@ -9,10 +9,10 @@ foreach ($folder in @(
         if (Test-Path -Path $root) {
             $files = Get-ChildItem -Path $root -Filter *.ps1 -Recurse
             $files | Where-Object {
-                    $_.name -NotLike '*.Tests.ps1'
-                } | ForEach-Object {
-                    . $_.FullName
-                }
+                $_.name -NotLike '*.Tests.ps1'
+            } | ForEach-Object {
+                . $_.FullName
+            }
         }
     }
 
