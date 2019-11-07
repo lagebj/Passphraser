@@ -10,9 +10,7 @@
     CompanyName       = ''
     Copyright         = '(c) 2019 Lage Berger Jensen. All rights reserved.'
     Description       = 'Powershell passphrase generator'
-    FunctionsToExport = @(
-        'New-Passphrase'
-    )
+    FunctionsToExport = @('*')
     CmdletsToExport   = @()
     VariablesToExport = @()
     AliasesToExport   = @()
