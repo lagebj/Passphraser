@@ -6,4 +6,5 @@ pages:
   - Passphraser Basics:
     - What is Passphraser: about.md
     - Quick Start: Quick-Start-Installation-and-Example.md
+    - How to use Passphraser: howto.md
   - Acknowledgements: acknowledgements.md
