@@ -8,9 +8,11 @@
     GUID              = 'b40097d7-bc39-4f92-a85d-cc5e39be939a'
     Author            = 'Lage Berger Jensen'
     CompanyName       = ''
-    Copyright         = '(c) Lage Berger Jensen. All rights reserved.'
-    Description       = ''
-    FunctionsToExport = @('*')
+    Copyright         = '(c) 2019 Lage Berger Jensen. All rights reserved.'
+    Description       = 'Powershell passphrase generator'
+    FunctionsToExport = @(
+        'New-Passphrase'
+    )
     CmdletsToExport   = @()
     VariablesToExport = @()
     AliasesToExport   = @()
@@ -32,11 +34,15 @@
     # FileList = @()
     PrivateData       = @{
         PSData = @{
-            # Tags = @()
-            # LicenseUri = ''
-            # ProjectUri = ''
+            Tags = @(
+                'passphrase',
+                'password',
+                'generator'
+            )
+            LicenseUri = 'https://github.com/lagebj/Passphraser/blob/master/LICENSE'
+            ProjectUri = 'https://github.com/lagebj/Passphraser'
             # IconUri = ''
-            # ReleaseNotes = ''
+            ReleaseNotes = 'https://github.com/lagebj/Passphraser/blob/master/ReleaseNotes.md'
         }
     }
     # HelpInfoURI = ''

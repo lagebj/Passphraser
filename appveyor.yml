@@ -15,4 +15,5 @@ build: off
 
 #Kick off the CI/CD pipeline
 test_script:
+  .-ps: Install-Module psake
   - ps: . .\build\Invoke-Build.ps1
