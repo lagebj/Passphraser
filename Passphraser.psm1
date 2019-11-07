@@ -16,4 +16,4 @@ foreach ($folder in @(
         }
     }
 
-Export-ModuleMember -function (Get-ChildItem -Path "$PSScriptRoot\scripts\public\*.ps1").basename
+Export-ModuleMember -Function (Get-ChildItem -Path "$PSScriptRoot\scripts\public\*.ps1").basename
