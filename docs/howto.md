@@ -45,7 +45,7 @@ PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOf
 ```
 Generates a new password with 5 words, dash (-) as separator with 2 numbers, 2 special characters, one uppercase word and pipes the string to "clip"
 
-## PARAMETERS
+## Parameters
 
 ### -AmountOfNumbers
 Amount of numbers to include
@@ -186,14 +186,10 @@ Accept wildcard characters: False
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
-## INPUTS
+## Inputs
 
 ### None
 
-## OUTPUTS
+## Outputs
 
 ### System.String
-
-## NOTES
-
-## RELATED LINKS
