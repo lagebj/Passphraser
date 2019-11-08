@@ -2,7 +2,9 @@
     [CmdletBinding(
         SupportsShouldProcess,
         ConfirmImpact = 'Low')]
-    [OutputType([string])]
+    [OutputType(
+        [string],
+        [Passphrase])]
     Param (
         [Parameter(
             Mandatory = $false,
