@@ -93,7 +93,7 @@
             }
             if ($IncludeSpecials) {
                 for ($i = 1; $i -le $AmountOfSpecials; $i++) {
-                    [char[]]$Special = $SpecialCharacters |
+                    [char]$Special = $SpecialCharacters |
                     Get-Random
                     [string]$Word = $PasswordString.Split($Separator) |
                     Get-Random
