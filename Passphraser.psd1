@@ -23,7 +23,7 @@
     # ProcessorArchitecture = ''
     # RequiredModules = @()
     # RequiredAssemblies = @()
-    # ScriptsToProcess = @()
+    ScriptsToProcess = @('.\classes\Passphrase.Class.ps1')
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
