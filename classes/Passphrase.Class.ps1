@@ -4,15 +4,8 @@
     [ValidatePattern('[!"#$%&()*+,-./:;<=>?@\^_{|}]')][System.Collections.Generic.List[char]]$Specials = @()
     [AllowEmptyString()][string]$Separator
 
-    Passphrase([array]$Words) {
-        $Words | Get-Random -Count 3 | ForEach-Object {
-            $this.Words.Add($_)
-        }
-        $this.Separator = ' '
-    }
-    
-    Passphrase([array]$Words, [string]$Separator) {
-        $Words | Get-Random -Count 3 | ForEach-Object {
+    Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator) {
+        $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
         $this.Separator = $Separator
