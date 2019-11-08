@@ -14,8 +14,8 @@ Generates a new random passphrase.
 
 ```
 New-Passphrase [[-AmountOfWords] <Int32>] [[-Separator] <String>] [-IncludeNumbers]
- [[-AmountOfNumbers] <Int32>] [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [[-AmountOfNumbers] <Int32>] [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,28 +28,35 @@ Generates a new random passphrase. Choose how many words, if you want to include
 PS C:\> New-Passphrase
 ```
 
-Generates a new all lowercase password with default values, 3 words and whitespace as separator.
+Generates a new all lowercase passphrase with default values, 3 words and whitespace as separator.
 
 ### Example 2
 ```powershell
 PS C:\> New-Passphrase -Separator "-"
 ```
 
-Generates a new all lowercase password with 3 words and dash (-) as separator.
+Generates a new all lowercase passphrase with 3 words and dash (-) as separator.
 
 ### Example 3
 ```powershell
-PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOfNumbers 2 -IncludeUppercase
+PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOfNumbers 2 -IncludeUppercase | clip
 ```
 
-Generates a new password with 5 words, dash (-) as separator with 2 numbers and one uppercase word.
+Generates a new passphrase with 5 words, dash (-) as separator with 2 numbers, one uppercase word and pipes the ouput to clipboard.
 
 ### Example 4
 ```powershell
 PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOfNumbers 2 -IncludeUppercase -IncludeSpecials -AmountOfSpecials 2
 ```
 
-Generates a new password with 5 words, dash (-) as separator with 2 numbers, 2 special characters and one uppercase word.
+Generates a new passphrase with 5 words, dash (-) as separator with 2 numbers, 2 special characters and one uppercase word.
+
+### Example 5
+```powershell
+PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOfNumbers 2 -IncludeUppercase -IncludeSpecials -AmountOfSpecials 2 -AsObject
+```
+
+Generates a new passphrase object with 5 words, dash (-) as separator with 2 numbers, 2 special characters and one uppercase word. This object can then be manipulated further.
 
 ## PARAMETERS
 
@@ -94,6 +101,21 @@ Aliases:
 Required: False
 Position: 0
 Default value: 3
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AsObject
+Return passphrase as passphrase object
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -198,7 +220,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.String
+### System.String or System.Object
 
 ## NOTES
 

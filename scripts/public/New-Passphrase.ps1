@@ -4,7 +4,7 @@
         ConfirmImpact = 'Low')]
     [OutputType(
         [string],
-        [Passphrase])]
+        [psobject])]
     Param (
         [Parameter(
             Mandatory = $false,
@@ -74,7 +74,7 @@
                 $Passphrase.AddSpecial($AmountOfSpecials)
             }
             if ($AsObject) {
-                return $Passphrase
+                return [psobject]$Passphrase
             } else {
                 return $Passphrase.ToString()
             }
