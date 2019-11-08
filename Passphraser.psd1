@@ -10,7 +10,9 @@
     CompanyName       = ''
     Copyright         = '(c) 2019 Lage Berger Jensen. All rights reserved.'
     Description       = 'Powershell passphrase generator'
-    FunctionsToExport = @('*')
+    FunctionsToExport = @(
+        'New-Passphrase'
+    )
     CmdletsToExport   = @()
     VariablesToExport = @()
     AliasesToExport   = @()
@@ -23,7 +25,9 @@
     # ProcessorArchitecture = ''
     # RequiredModules = @()
     # RequiredAssemblies = @()
-    ScriptsToProcess = @('.\classes\Passphrase.Class.ps1')
+    ScriptsToProcess = @(
+        '.\classes\Passphrase.Class.ps1'
+    )
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
@@ -33,6 +37,7 @@
     PrivateData       = @{
         PSData = @{
             Tags = @(
+                'passphraser'
                 'passphrase',
                 'password',
                 'generator'
