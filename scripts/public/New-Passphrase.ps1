@@ -74,7 +74,7 @@
                 $Passphrase.AddSpecial($AmountOfSpecials)
             }
             if ($AsObject) {
-                return [psobject]$Passphrase
+                return $Passphrase
             } else {
                 return $Passphrase.ToString()
             }
