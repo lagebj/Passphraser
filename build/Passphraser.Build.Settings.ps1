@@ -91,7 +91,7 @@ Properties {
     # provide either a subject name or path to a PFX file.  After this one time prompt, the value will
     # saved for future use and you will no longer be prompted.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ScriptSigningEnabled = $true
+    $ScriptSigningEnabled = $false
 
     # Specify the Subject Name of the certificate used to sign your scripts.  Leave it as $null and the
     # first time you build, you will be prompted to enter your code-signing certificate's Subject Name.
@@ -162,7 +162,7 @@ Properties {
     # This is typically used to write out test results so that they can be sent to a CI
     # system like AppVeyor.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $TestOutputFile = $null
+    $TestOutputFile = "$TestRootDir\output\$ModuleName.Tests.xml"
 
     # Specifies the test output format to use when the TestOutputFile property is given
     # a path.  This parameter is passed through to Invoke-Pester's -OutputFormat parameter.
