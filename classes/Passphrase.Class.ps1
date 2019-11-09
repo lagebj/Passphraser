@@ -10,7 +10,9 @@
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
+
         $this.Separator = $Separator
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -18,6 +20,7 @@
         $Words | ForEach-Object {
             $this.Words.Add($_)
         }
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -26,20 +29,24 @@
             [int]$Number = (0..9) | Get-Random
             $this.Numbers.Add($Number)
         }
+
         $this.Strength = $this.GetStrength()
     }
     
     [void]AddSpecial([int]$AmountOfSpecials) {
         [char[]]$SpecialCharacters = '!"#$%&()*+,-./:;<=>?@\^_{|}'.ToCharArray()
+
         for ($i = 1; $i -le $AmountOfSpecials; $i++) {
             $Special = $SpecialCharacters | Get-Random
             $this.Specials.Add($Special)
         }
+
         $this.Strength = $this.GetStrength()
     }
 
     [void]AddUppercase() {
         $this.IncludeUppercase = $true
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -47,6 +54,7 @@
         $Words | ForEach-Object {
             $this.Words.Remove($_)
         }
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -54,6 +62,7 @@
         $Numbers | ForEach-Object {
             $this.Numbers.Remove($_)
         }
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -61,11 +70,13 @@
         $Specials | ForEach-Object {
             $this.Specials.Remove($_)
         }
+
         $this.Strength = $this.GetStrength()
     }
 
     [void]RemoveUppercase() {
         $this.IncludeUppercase = $false
+
         $this.Strength = $this.GetStrength()
     }
 
@@ -161,10 +172,12 @@
 
     [string]ToString() {
         [string[]]$WordsArray = $this.Words | Sort-Object {Get-Random}
+
         if ($this.IncludeUppercase) {
             [string]$Word = $WordsArray | Get-Random
             $WordsArray = $WordsArray.Replace($Word, $Word.ToUpper())
         }
+        
         foreach ($Num in $this.Numbers) {
             [string]$Word = $WordsArray | Get-Random
             [int]$Placement = @(
