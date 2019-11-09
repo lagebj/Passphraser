@@ -4,7 +4,7 @@
 
 @{
     RootModule        = 'Passphraser.psm1'
-    ModuleVersion     = '1.0.3'
+    ModuleVersion     = '1.0.4'
     GUID              = 'b40097d7-bc39-4f92-a85d-cc5e39be939a'
     Author            = 'Lage Berger Jensen'
     CompanyName       = ''
