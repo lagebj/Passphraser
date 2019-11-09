@@ -11,6 +11,12 @@
         $this.Separator = $Separator
     }
 
+    [void]AddWord([string[]]$Words) {
+        $Words | ForEach-Object {
+            $this.Words.Add($_)
+        }
+    }
+
     [void]AddNumber([int]$AmountOfNumbers) {
         for ($i = 1; $i -le $AmountOfNumbers; $i++) {
             [int]$Number = (0..9) | Get-Random
@@ -35,13 +41,14 @@
     }
 
     [string]ToString() {
+        [string[]]$WordsArray = $this.Words
         foreach ($Num in $this.Numbers) {
             [string]$Word = $this.Words | Get-Random
             [int]$Placement = @(
                 0,
                 $Word.Length) | Get-Random
             [string]$WordWithNumber = $Word.Insert($Placement, $Num)
-            $this.Words = $this.Words.Replace($Word, $WordWithNumber)
+            $WordsArray = $WordsArray.Replace($Word, $WordWithNumber)
         }
 
         foreach ($Char in $this.Specials) {
@@ -50,9 +57,9 @@
                 0,
                 $Word.Length) | Get-Random
             [string]$WordWithSpecial = $Word.Insert($Placement, $Char)
-            $this.Words = $this.Words.Replace($Word, $WordWithSpecial)
+            $WordsArray = $WordsArray.Replace($Word, $WordWithSpecial)
         }
 
-        return $this.Words -join $this.Separator
+        return $WordsArray -join $this.Separator
     }
 }
