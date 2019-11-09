@@ -139,19 +139,19 @@
         }
 
         $PassphraseStrength = switch ([int]$Score) {
-            {[double]0..[double]27 -contains $_} {
+            {0..27 -contains $_} {
                 'Weak'
             }
-            {[double]28..[double]35 -contains $_} {
+            {28..35 -contains $_} {
                 'Reasonable'
             }
-            {[double]36..[double]59 -contains $_} {
+            {36..59 -contains $_} {
                 'Strong'
             }
-            {[double]60..[double]127 -contains $_} {
+            {60..127 -contains $_} {
                 'Very strong'
             }
-            {[double]128..[double]50128 -contains $_} {
+            {128..50128 -contains $_} {
                 'Overkill'
             }
         }
