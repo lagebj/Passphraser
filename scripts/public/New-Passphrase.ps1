@@ -2,9 +2,11 @@
     [CmdletBinding(
         SupportsShouldProcess,
         ConfirmImpact = 'Low')]
+
     [OutputType(
         [string],
         [psobject])]
+
     Param (
         [Parameter(
             Mandatory = $false,
@@ -13,6 +15,7 @@
         [ValidateNotNullOrEmpty()]
         [int]
         $AmountOfWords = 3,
+
         [Parameter(
             Mandatory = $false,
             Position = 3,
@@ -20,11 +23,13 @@
         [ValidateNotNullOrEmpty()]
         [string]
         $Separator = " ",
+
         [Parameter(
             Mandatory = $false,
             HelpMessage = 'Includes numbers')]
         [switch]
         $IncludeNumbers,
+
         [Parameter(
             Mandatory = $false,
             Position = 1,
@@ -32,22 +37,26 @@
         [ValidateNotNullOrEmpty()]
         [int]
         $AmountOfNumbers = 1,
+
         [Parameter(
             Mandatory = $false,
             HelpMessage = 'Include an uppercase word')]
         [switch]
         $IncludeUppercase,
+
         [Parameter(
             Mandatory = $false,
             HelpMessage = 'Include special characters')]
         [switch]
         $IncludeSpecials,
+
         [Parameter(
             Mandatory = $false,
             Position = 2,
             HelpMessage = 'Amount of special characters to include')]
         [int]
         $AmountOfSpecials = 1,
+
         [Parameter(
             Mandatory = $false,
             HelpMessage = 'Return passphrase as object')]
@@ -63,16 +72,21 @@
     if ($PSCmdlet.ShouldProcess("Generates a new random passphrase")) {
         try {
             [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
+
             $Passphrase = [Passphrase]::new($Words, $AmountOfWords, $Separator)
+
             if ($IncludeUppercase) {
                 $Passphrase.AddUppercase()
             }
+
             if ($IncludeNumbers) {
                 $Passphrase.AddNumber($AmountOfNumbers)
             }
+
             if ($IncludeSpecials) {
                 $Passphrase.AddSpecial($AmountOfSpecials)
             }
+
             if ($AsObject) {
                 return $Passphrase
             } else {
