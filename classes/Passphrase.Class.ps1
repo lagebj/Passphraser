@@ -148,7 +148,7 @@
     }
 
     [string]ToString() {
-        [string[]]$WordsArray = $this.Words
+        [string[]]$WordsArray = $this.Words | Sort-Object {Get-Random}
         foreach ($Num in $this.Numbers) {
             [string]$Word = $this.Words | Get-Random
             [int]$Placement = @(
