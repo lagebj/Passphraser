@@ -3,18 +3,22 @@
     [ValidateRange(0, 9)][System.Collections.Generic.List[int]]$Numbers = @()
     [ValidatePattern('[!"#$%&()*+,-./:;<=>?@\^_{|}]')][System.Collections.Generic.List[char]]$Specials = @()
     [AllowEmptyString()][string]$Separator
+    [bool]$IncludeUppercase = $false
+    [ValidateSet('Weak','Reasonable','Strong','Very strong','Overkill')][string]$Strength
 
     Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
         $this.Separator = $Separator
+        $this.Strength = $this.GetStrength()
     }
 
     [void]AddWord([string[]]$Words) {
         $Words | ForEach-Object {
             $this.Words.Add($_)
         }
+        $this.Strength = $this.GetStrength()
     }
 
     [void]AddNumber([int]$AmountOfNumbers) {
@@ -22,6 +26,7 @@
             [int]$Number = (0..9) | Get-Random
             $this.Numbers.Add($Number)
         }
+        $this.Strength = $this.GetStrength()
     }
     
     [void]AddSpecial([int]$AmountOfSpecials) {
@@ -30,32 +35,41 @@
             $Special = $SpecialCharacters | Get-Random
             $this.Specials.Add($Special)
         }
+        $this.Strength = $this.GetStrength()
     }
 
     [void]AddUppercase() {
-        $Word = $this.Words | Get-Random
-        $this.Words = $this.Words.Replace($Word, $Word.ToUpper())
+        $this.IncludeUppercase = $true
+        $this.Strength = $this.GetStrength()
     }
 
     [void]RemoveWord([string[]]$Words) {
         $Words | ForEach-Object {
             $this.Words.Remove($_)
         }
+        $this.Strength = $this.GetStrength()
     }
 
     [void]RemoveNumber([int[]]$Numbers) {
         $Numbers | ForEach-Object {
             $this.Numbers.Remove($_)
         }
+        $this.Strength = $this.GetStrength()
     }
 
     [void]RemoveSpecial([char[]]$Specials) {
         $Specials | ForEach-Object {
             $this.Specials.Remove($_)
         }
+        $this.Strength = $this.GetStrength()
     }
 
-    [psobject]GetComplexity() {
+    [void]RemoveUppercase() {
+        $this.IncludeUppercase = $false
+        $this.Strength = $this.GetStrength()
+    }
+
+    [string]GetStrength() {
         [string]$String = $this.ToString()
         [double]$Score = 0
         [int]$CharacterSets = 0
@@ -124,31 +138,35 @@
             $Score = $Score + 6
         }
 
-        $Strength = switch ($Score) {
-            {0..27 -contains $_} {
-                'Very weak'
-            }
-            {28..35 -contains $_} {
+        $PassphraseStrength = switch ([int]$Score) {
+            {[double]0..[double]27 -contains $_} {
                 'Weak'
             }
-            {36..59 -contains $_} {
+            {[double]28..[double]35 -contains $_} {
                 'Reasonable'
             }
-            {60..127 -contains $_} {
+            {[double]36..[double]59 -contains $_} {
                 'Strong'
             }
-            {128..50128 -contains $_} {
+            {[double]60..[double]127 -contains $_} {
                 'Very strong'
+            }
+            {[double]128..[double]50128 -contains $_} {
+                'Overkill'
             }
         }
 
-        return $Strength
+        return $PassphraseStrength
     }
 
     [string]ToString() {
         [string[]]$WordsArray = $this.Words | Sort-Object {Get-Random}
+        if ($this.IncludeUppercase) {
+            [string]$Word = $WordsArray | Get-Random
+            $WordsArray = $WordsArray.Replace($Word, $Word.ToUpper())
+        }
         foreach ($Num in $this.Numbers) {
-            [string]$Word = $this.Words | Get-Random
+            [string]$Word = $WordsArray | Get-Random
             [int]$Placement = @(
                 0,
                 $Word.Length) | Get-Random
@@ -157,7 +175,7 @@
         }
 
         foreach ($Char in $this.Specials) {
-            [string]$Word = $this.Words | Get-Random
+            [string]$Word = $WordsArray | Get-Random
             [int]$Placement = @(
                 0,
                 $Word.Length) | Get-Random
