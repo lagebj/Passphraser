@@ -55,8 +55,6 @@
         }
     }
 
-
-
     [psobject]GetComplexity() {
         [string]$String = $this.ToString()
         [double]$Score = 0
