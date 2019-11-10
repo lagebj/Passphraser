@@ -13,9 +13,9 @@ Generates a new random passphrase.
 ## SYNTAX
 
 ```
-New-Passphrase [[-AmountOfWords] <Int32>] [[-Separator] <String>] [-IncludeNumbers]
- [[-AmountOfNumbers] <Int32>] [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-Passphrase [[-AmountOfWords] <Int32>] [[-Separator] <Char>] [-IncludeNumbers] [[-AmountOfNumbers] <Int32>]
+ [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -184,7 +184,7 @@ Accept wildcard characters: False
 Separator to use between words
 
 ```yaml
-Type: String
+Type: Char
 Parameter Sets: (All)
 Aliases:
 
