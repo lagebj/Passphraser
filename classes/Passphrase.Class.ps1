@@ -5,13 +5,16 @@
     [AllowEmptyString()][string]$Separator
     [bool]$IncludeUppercase = $false
     [ValidateSet('Weak','Reasonable','Strong','Very strong','Overkill')][string]$Strength
+    [ValidateRange(0,50128)][double]$Points
 
     Passphrase([array]$Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
             $this.Words.Add($_)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator) {
@@ -21,7 +24,9 @@
 
         $this.Separator = $Separator
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator, [int]$AmountOfNumbers, [int]$AmountOfSpecials, [bool]$IncludeUppercase) {
@@ -39,7 +44,9 @@
             $this.AddUppercase()
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]AddWord([string[]]$Words) {
@@ -47,7 +54,9 @@
             $this.Words.Add($_)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]AddNumber([int]$AmountOfNumbers) {
@@ -56,7 +65,9 @@
             $this.Numbers.Add($Number)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
     
     [void]AddSpecial([int]$AmountOfSpecials) {
@@ -67,13 +78,17 @@
             $this.Specials.Add($Special)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]AddUppercase() {
         $this.IncludeUppercase = $true
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]RemoveWord([string[]]$Words) {
@@ -81,7 +96,9 @@
             $this.Words.Remove($_)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]RemoveNumber([int[]]$Numbers) {
@@ -89,7 +106,9 @@
             $this.Numbers.Remove($_)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]RemoveSpecial([char[]]$Specials) {
@@ -97,13 +116,17 @@
             $this.Specials.Remove($_)
         }
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [void]RemoveUppercase() {
         $this.IncludeUppercase = $false
 
-        $this.Strength = $this.GetStrength()
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
     }
 
     [string]GetStrength() {
@@ -194,6 +217,100 @@
         }
 
         return $PassphraseStrength
+    }
+
+    [array]GetStrength([bool]$IncludePoints) {
+        [string]$String = $this.ToString()
+        [double]$Score = 0
+        [int]$CharacterSets = 0
+        [int]$MultipleCharactersInSets = 0
+
+        if ($String.Length -ge 1) {
+            $Score = $Score + 4
+        }
+
+        if ($String.Lenth -ge 8) {
+            $String.Substring(1,7).ToCharArray() | ForEach-Object {
+                $Score = $Score + 2
+            }
+        } elseif ($String.Length -lt 8 -and $String.Length -gt 1) {
+            $String.Substring(1,($String.Length - 1)).ToCharArray() | ForEach-Object {
+                $Score = $Score + 2
+            }
+        }
+
+        if ($String.Lenth -ge 20) {
+            $String.Substring(8,19).ToCharArray() | ForEach-Object {
+                $Score = $Score + 1.5
+            }
+        } elseif ($String.Length -lt 20 -and $String.Length -gt 8) {
+            $String.Substring(8,($String.Length - 8)).ToCharArray() | ForEach-Object {
+                $Score = $Score + 1.5
+            }
+        }
+
+        if ($String.Length -gt 20) {
+            $String.ToCharArray() | ForEach-Object {
+                $Score = $Score + 1
+            }
+        }
+
+        switch -Regex -CaseSensitive ($String) {
+            ([regex]::new('[a-z]')) {
+                $CharacterSets++
+            }
+            ([regex]::new('[A-Z]')) {
+                $CharacterSets++
+            }
+            ([regex]::new('\d')) {
+                $CharacterSets++
+            }
+            ([regex]::new('[!"#$%&()*+,-./:;<=>?@\^_{|}]')) {
+                $CharacterSets++
+            }
+            ([regex]::new('[a-z].*[a-z]')) {
+                $MultipleCharactersInSets++
+            }
+            ([regex]::new('[A-Z].*[A-Z]')) {
+                $MultipleCharactersInSets++
+            }
+            ([regex]::new('\d.*\d')) {
+                $MultipleCharactersInSets++
+            }
+            ([regex]::new('[!"#$%&()*+,-./:;<=>?@\^_{|}].*[!"#$%&()*+,-./:;<=>?@\^_{|}]')) {
+                $MultipleCharactersInSets++
+            }
+        }
+
+        if ($MultipleCharactersInSets -ge 3) {
+            $Score = $Score + 8
+        } elseif ($CharacterSets -ge 3) {
+            $Score = $Score + 6
+        }
+
+        $PassphraseStrength = switch ([int]$Score) {
+            {0..27 -contains $_} {
+                'Weak'
+            }
+            {28..35 -contains $_} {
+                'Reasonable'
+            }
+            {36..59 -contains $_} {
+                'Strong'
+            }
+            {60..127 -contains $_} {
+                'Very strong'
+            }
+            {128..50128 -contains $_} {
+                'Overkill'
+            }
+        }
+
+        if ($IncludePoints) {
+            return $Score, $PassphraseStrength
+        } else {
+            return $PassphraseStrength
+        }
     }
 
     [string]ToString() {
