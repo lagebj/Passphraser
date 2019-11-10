@@ -21,7 +21,7 @@
             Position = 3,
             HelpMessage = 'Separator to use between words')]
         [ValidateNotNullOrEmpty()]
-        [string]
+        [char]
         $Separator = " ",
 
         [Parameter(

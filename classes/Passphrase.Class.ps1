@@ -14,7 +14,7 @@
     [System.Collections.Generic.List[char]]$Specials = @()
 
     [ValidateNotNullOrEmpty()]
-    [string]$Separator
+    [char]$Separator
 
     [bool]$IncludeUppercase = $false
 
@@ -34,7 +34,7 @@
     [int]$Length
 
     Passphrase(
-        [array]$Words) {
+        [string[]]$Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -46,9 +46,52 @@
     }
 
     Passphrase(
-        [array]$Words,
+        [string]$Passphrase,
+        [char]$Separator) {
+        [string[]]$WordsArray = $Passphrase.Split($Separator)
+
+        [string[]]$WordsWithNumbers = $WordsArray -match '\d'
+        [int[]]$NumbersFound = $WordsWithNumbers -replace '\D',''
+        $NumbersFound | ForEach-Object {
+            [int[]](($_ -split '') -ne '') | ForEach-Object {
+                $this.Numbers.Add($_)
+            }
+        }
+        $WordsWithNumbers | ForEach-Object {
+            $WordsArray = $WordsArray.Replace($_, ($_ -replace '\d',''))
+        }
+
+        [string[]]$WordsWithSpecials = $WordsArray -match '[^A-Za-z0-9]+'
+        [string[]]$SpecialsFound = $WordsWithSpecials -replace '[A-Za-z0-9]+'
+        $SpecialsFound | ForEach-Object {
+            [char[]](($_ -split '') -ne '') | ForEach-Object {
+                $this.Specials.Add($_)
+            }
+        }
+        $WordsWithSpecials | ForEach-Object {
+            $WordsArray = $WordsArray.Replace($_, ($_ -replace '[^A-Za-z0-9]+',''))
+        }
+
+        [string[]]$WordsUppercase = $WordsArray -cmatch '[A-Z]+'
+        $WordsUppercase | ForEach-Object {
+            $WordsArray = $WordsArray.Replace($_, $_.ToLower())
+        }
+        if ($WordsUppercase) {
+            $this.IncludeUppercase = $true
+        }
+
+        $this.Words = $WordsArray
+
+        $PassphraseStrength = $this.GetStrength($true)
+        $this.Points = $PassphraseStrength[0]
+        $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
+    }
+
+    Passphrase(
+        [string[]]$Words,
         [int]$AmountOfWords,
-        [string]$Separator) {
+        [char]$Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -62,9 +105,9 @@
     }
 
     Passphrase(
-        [array]$Words,
+        [string[]]$Words,
         [int]$AmountOfWords,
-        [string]$Separator,
+        [char]$Separator,
         [int]$AmountOfNumbers,
         [int]$AmountOfSpecials,
         [bool]$IncludeUppercase) {
