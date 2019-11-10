@@ -10,7 +10,7 @@
     [System.Collections.Generic.List[int]]$Numbers = @()
 
     [ValidatePattern(
-        '[!"#$%&()*+,-./:;<=>?@\^_{|}]')]
+        '[!"#$%&()*+,./:;<=>?@\^_{|}]')]
     [System.Collections.Generic.List[char]]$Specials = @()
 
     [ValidateNotNullOrEmpty()]
@@ -108,7 +108,7 @@
     
     [void]AddSpecial(
         [int]$AmountOfSpecials) {
-        [char[]]$SpecialCharacters = '!"#$%&()*+,-./:;<=>?@\^_{|}'.ToCharArray()
+        [char[]]$SpecialCharacters = '!"#$%&()*+,./:;<=>?@\^_{|}'.ToCharArray()
 
         for ($i = 1; $i -le $AmountOfSpecials; $i++) {
             $Special = $SpecialCharacters | Get-Random
