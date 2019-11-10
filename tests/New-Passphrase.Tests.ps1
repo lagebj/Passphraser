@@ -1,7 +1,7 @@
 ﻿. $PSScriptRoot\Shared.ps1
 
 Describe 'New-Passphrase Tests' {
-    Context 'Generates password with default settings, 3 all lowercase words, no numbers and whitespace (" ") as separator' {
+    Context 'Generates password with 3 all lowercase words, no numbers and whitespace (" ") as separator' {
         [string]$PasswordString = New-Passphrase
         It 'Contains 3 words' {
             $PasswordString.Split(" ") | Should -HaveCount 3
