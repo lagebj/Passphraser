@@ -31,6 +31,8 @@
         50128)]
     [double]$Points
 
+    [int]$Length
+
     Passphrase(
         [array]$Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
@@ -40,6 +42,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     Passphrase(
@@ -55,6 +58,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     Passphrase(
@@ -81,6 +85,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]AddWord(
@@ -92,6 +97,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]AddNumber(
@@ -104,6 +110,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
     
     [void]AddSpecial(
@@ -118,6 +125,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]AddUppercase() {
@@ -126,6 +134,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]RemoveWord(
@@ -137,6 +146,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]RemoveNumber(
@@ -148,6 +158,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]RemoveSpecial(
@@ -159,6 +170,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [void]RemoveUppercase() {
@@ -167,6 +179,7 @@
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
+        $this.Length = $this.ToString().Length
     }
 
     [string]GetStrength() {
