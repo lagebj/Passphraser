@@ -75,19 +75,19 @@
 
             $Passphrase = [Passphrase]::new($Words, $AmountOfWords, $Separator)
 
-            if ($IncludeUppercase) {
+            if ($PSBoundParameters.ContainsKey('IncludeUppercase')) {
                 $Passphrase.AddUppercase()
             }
 
-            if ($IncludeNumbers) {
+            if ($PSBoundParameters.ContainsKey('IncludeNumbers')) {
                 $Passphrase.AddNumber($AmountOfNumbers)
             }
 
-            if ($IncludeSpecials) {
+            if ($PSBoundParameters.ContainsKey('IncludeSpecials')) {
                 $Passphrase.AddSpecial($AmountOfSpecials)
             }
 
-            if ($AsObject) {
+            if ($PSBoundParameters.ContainsKey('AsObject')) {
                 return $Passphrase
             } else {
                 return $Passphrase.ToString()

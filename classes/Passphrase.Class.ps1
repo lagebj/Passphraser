@@ -6,12 +6,38 @@
     [bool]$IncludeUppercase = $false
     [ValidateSet('Weak','Reasonable','Strong','Very strong','Overkill')][string]$Strength
 
+    Passphrase([array]$Words) {
+        $Words | Get-Random -Count 3 | ForEach-Object {
+            $this.Words.Add($_)
+        }
+
+        $this.Strength = $this.GetStrength()
+    }
+
     Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
 
         $this.Separator = $Separator
+
+        $this.Strength = $this.GetStrength()
+    }
+
+    Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator, [int]$AmountOfNumbers, [int]$AmountOfSpecials, [bool]$IncludeUppercase) {
+        $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
+            $this.Words.Add($_)
+        }
+
+        $this.Separator = $Separator
+
+        $this.AddNumber($AmountOfNumbers)
+
+        $this.AddSpecial($AmountOfSpecials)
+
+        if ($IncludeUppercase) {
+            $this.AddUppercase()
+        }
 
         $this.Strength = $this.GetStrength()
     }
