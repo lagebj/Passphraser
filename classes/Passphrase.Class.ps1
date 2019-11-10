@@ -1,13 +1,38 @@
 ﻿class Passphrase {
-    [ValidateCount(0, 3065)][System.Collections.Generic.List[string]]$Words = @()
-    [ValidateRange(0, 9)][System.Collections.Generic.List[int]]$Numbers = @()
-    [ValidatePattern('[!"#$%&()*+,-./:;<=>?@\^_{|}]')][System.Collections.Generic.List[char]]$Specials = @()
-    [AllowEmptyString()][string]$Separator
-    [bool]$IncludeUppercase = $false
-    [ValidateSet('Weak','Reasonable','Strong','Very strong','Overkill')][string]$Strength
-    [ValidateRange(0,50128)][double]$Points
+    [ValidateCount(
+        0,
+        3065)]
+    [System.Collections.Generic.List[string]]$Words = @()
 
-    Passphrase([array]$Words) {
+    [ValidateRange(
+        0,
+        9)]
+    [System.Collections.Generic.List[int]]$Numbers = @()
+
+    [ValidatePattern(
+        '[!"#$%&()*+,-./:;<=>?@\^_{|}]')]
+    [System.Collections.Generic.List[char]]$Specials = @()
+
+    [ValidateNotNullOrEmpty()]
+    [string]$Separator
+
+    [bool]$IncludeUppercase = $false
+
+    [ValidateSet(
+        'Weak',
+        'Reasonable',
+        'Strong',
+        'Very strong',
+        'Overkill')]
+    [string]$Strength
+
+    [ValidateRange(
+        0,
+        50128)]
+    [double]$Points
+
+    Passphrase(
+        [array]$Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -17,7 +42,10 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator) {
+    Passphrase(
+        [array]$Words,
+        [int]$AmountOfWords,
+        [string]$Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -29,7 +57,13 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    Passphrase([array]$Words, [int]$AmountOfWords, [string]$Separator, [int]$AmountOfNumbers, [int]$AmountOfSpecials, [bool]$IncludeUppercase) {
+    Passphrase(
+        [array]$Words,
+        [int]$AmountOfWords,
+        [string]$Separator,
+        [int]$AmountOfNumbers,
+        [int]$AmountOfSpecials,
+        [bool]$IncludeUppercase) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -49,7 +83,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    [void]AddWord([string[]]$Words) {
+    [void]AddWord(
+        [string[]]$Words) {
         $Words | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -59,7 +94,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    [void]AddNumber([int]$AmountOfNumbers) {
+    [void]AddNumber(
+        [int]$AmountOfNumbers) {
         for ($i = 1; $i -le $AmountOfNumbers; $i++) {
             [int]$Number = (0..9) | Get-Random
             $this.Numbers.Add($Number)
@@ -70,7 +106,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
     
-    [void]AddSpecial([int]$AmountOfSpecials) {
+    [void]AddSpecial(
+        [int]$AmountOfSpecials) {
         [char[]]$SpecialCharacters = '!"#$%&()*+,-./:;<=>?@\^_{|}'.ToCharArray()
 
         for ($i = 1; $i -le $AmountOfSpecials; $i++) {
@@ -91,7 +128,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    [void]RemoveWord([string[]]$Words) {
+    [void]RemoveWord(
+        [string[]]$Words) {
         $Words | ForEach-Object {
             $this.Words.Remove($_)
         }
@@ -101,7 +139,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    [void]RemoveNumber([int[]]$Numbers) {
+    [void]RemoveNumber(
+        [int[]]$Numbers) {
         $Numbers | ForEach-Object {
             $this.Numbers.Remove($_)
         }
@@ -111,7 +150,8 @@
         $this.Strength = $PassphraseStrength[1]
     }
 
-    [void]RemoveSpecial([char[]]$Specials) {
+    [void]RemoveSpecial(
+        [char[]]$Specials) {
         $Specials | ForEach-Object {
             $this.Specials.Remove($_)
         }
@@ -219,7 +259,8 @@
         return $PassphraseStrength
     }
 
-    [array]GetStrength([bool]$IncludePoints) {
+    [array]GetStrength(
+        [bool]$IncludePoints) {
         [string]$String = $this.ToString()
         [double]$Score = 0
         [int]$CharacterSets = 0
