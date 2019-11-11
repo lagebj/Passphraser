@@ -1,20 +1,22 @@
 ﻿# How to use Passphraser
 
-The syntax for New-Passphrase is
+## Syntax
+
+### New (Default)
 ```
-New-Passphrase 
-    [[-AmountOfWords] <Int32>]
-    [[-Separator] <String>]
-    [-IncludeNumbers]
-    [[-AmountOfNumbers] <Int32>]
-    [-IncludeUppercase]
-    [-IncludeSpecials]
-    [[-AmountOfSpecials] <Int32>]
-    [-AsObject]
-    [-WhatIf]
-    [-Confirm]
-    [<CommonParameters>]
+New-Passphrase [[-AmountOfWords] <Int32>] [[-Separator] <Char>] [-IncludeNumbers] [[-AmountOfNumbers] <Int32>]
+ [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
+
+### Custom
+```
+New-Passphrase [[-Separator] <Char>] [-IncludeNumbers] [[-AmountOfNumbers] <Int32>] [-IncludeUppercase]
+ [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject] -CustomString <String> [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+## Examples
 
 ### Example 1
 ```powershell
@@ -52,6 +54,20 @@ PS C:\> New-Passphrase -AmountOfWords 5 -Separator "-" -IncludeNumbers -AmountOf
 ```
 
 Generates a new passphrase object with 5 words, dash (-) as separator with 2 numbers, 2 special characters and one uppercase word. This object can then be manipulated further.
+
+### Example 7
+```powershell
+PS C:\> New-Passphrase -CustomString 'custom6 TEST !string' -Separator " " -AsObject
+```
+
+Generates a new passphrase object from custom string 'custom6 TEST !string' and outputs as an object. This object can then be manipulated further.
+
+### Example 8
+```powershell
+PS C:\> 'custom6 TEST !string' | New-Passphrase -AsObject
+```
+
+CustomString accepts value from pipeline. This generates a new passphrase object from the value piped to New-Passphrase.
 
 ## Parameters
 
@@ -127,6 +143,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomString
+Custom string to build passphrase object from
+
+```yaml
+Type: String
+Parameter Sets: Custom
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
