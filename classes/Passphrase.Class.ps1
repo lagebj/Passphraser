@@ -80,7 +80,9 @@
             $this.IncludeUppercase = $true
         }
 
-        $this.Words = $WordsArray
+        $WordsArray | ForEach-Object {
+            $this.Words.Add($_)
+        }
 
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
@@ -235,28 +237,24 @@
             $Score = $Score + 4
         }
 
-        if ($String.Lenth -ge 8) {
-            $String.Substring(1,7).ToCharArray() | ForEach-Object {
+        if ($String.Length -ge 8) {
+            (($String.Substring(1, 7) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 2
             }
         } elseif ($String.Length -lt 8 -and $String.Length -gt 1) {
-            $String.Substring(1,($String.Length - 1)).ToCharArray() | ForEach-Object {
+            (($String.Substring(1, ($String.Length - 1)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 2
             }
         }
 
-        if ($String.Lenth -ge 20) {
-            $String.Substring(8,19).ToCharArray() | ForEach-Object {
-                $Score = $Score + 1.5
-            }
-        } elseif ($String.Length -lt 20 -and $String.Length -gt 8) {
-            $String.Substring(8,($String.Length - 8)).ToCharArray() | ForEach-Object {
+        if ($String.Length -le 20 -and $String.Length -gt 8) {
+            (($String.Substring(8, ($String.Length - 8)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 1.5
             }
         }
 
         if ($String.Length -gt 20) {
-            $String.ToCharArray() | ForEach-Object {
+            (($String.Substring(20, ($String.Length - 20)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 1
             }
         }
@@ -326,28 +324,24 @@
             $Score = $Score + 4
         }
 
-        if ($String.Lenth -ge 8) {
-            $String.Substring(1,7).ToCharArray() | ForEach-Object {
+        if ($String.Length -ge 8) {
+            (($String.Substring(1, 7) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 2
             }
         } elseif ($String.Length -lt 8 -and $String.Length -gt 1) {
-            $String.Substring(1,($String.Length - 1)).ToCharArray() | ForEach-Object {
+            (($String.Substring(1, ($String.Length - 1)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 2
             }
         }
 
-        if ($String.Lenth -ge 20) {
-            $String.Substring(8,19).ToCharArray() | ForEach-Object {
-                $Score = $Score + 1.5
-            }
-        } elseif ($String.Length -lt 20 -and $String.Length -gt 8) {
-            $String.Substring(8,($String.Length - 8)).ToCharArray() | ForEach-Object {
+        if ($String.Length -le 20 -and $String.Length -gt 8) {
+            (($String.Substring(8, ($String.Length - 8)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 1.5
             }
         }
 
         if ($String.Length -gt 20) {
-            $String.ToCharArray() | ForEach-Object {
+            (($String.Substring(20, ($String.Length - 20)) -split '') -ne '') | ForEach-Object {
                 $Score = $Score + 1
             }
         }
