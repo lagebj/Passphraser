@@ -1,7 +1,8 @@
 ﻿function New-Passphrase {
     [CmdletBinding(
         SupportsShouldProcess,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low',
+        DefaultParameterSetName = 'New')]
 
     [OutputType(
         [string],
@@ -9,6 +10,7 @@
 
     Param (
         [Parameter(
+            ParameterSetName = 'New',
             Mandatory = $false,
             Position = 0,
             HelpMessage = 'Amount of words to get')]
@@ -64,8 +66,10 @@
         $AsObject,
 
         [Parameter(
-            Mandatory = $false,
-            HelpMessage = 'Custom string to include in passphrase')]
+            ParameterSetName = 'Custom',
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            HelpMessage = 'Custom string to build passphrase object from')]
         [string]
         $CustomString
     )
