@@ -39,6 +39,8 @@
             $this.Words.Add($_)
         }
 
+        $this.Separator = ' '
+
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
         $this.Strength = $PassphraseStrength[1]
@@ -83,6 +85,8 @@
         $WordsArray | ForEach-Object {
             $this.Words.Add($_)
         }
+
+        $this.Separator = $Separator
 
         $PassphraseStrength = $this.GetStrength($true)
         $this.Points = $PassphraseStrength[0]
