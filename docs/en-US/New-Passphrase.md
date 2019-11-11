@@ -12,9 +12,17 @@ Generates a new random passphrase.
 
 ## SYNTAX
 
+### New (Default)
 ```
 New-Passphrase [[-AmountOfWords] <Int32>] [[-Separator] <Char>] [-IncludeNumbers] [[-AmountOfNumbers] <Int32>]
  [-IncludeUppercase] [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### Custom
+```
+New-Passphrase [[-Separator] <Char>] [-IncludeNumbers] [[-AmountOfNumbers] <Int32>] [-IncludeUppercase]
+ [-IncludeSpecials] [[-AmountOfSpecials] <Int32>] [-AsObject] -CustomString <String> [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -95,7 +103,7 @@ Amount of words to get
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: New
 Aliases:
 
 Required: False
@@ -132,6 +140,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomString
+Custom string to build passphrase object from
+
+```yaml
+Type: String
+Parameter Sets: Custom
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
