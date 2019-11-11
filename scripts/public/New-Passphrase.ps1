@@ -1,7 +1,8 @@
 ﻿function New-Passphrase {
     [CmdletBinding(
         SupportsShouldProcess,
-        ConfirmImpact = 'Low')]
+        ConfirmImpact = 'Low',
+        DefaultParameterSetName = 'New')]
 
     [OutputType(
         [string],
@@ -9,6 +10,7 @@
 
     Param (
         [Parameter(
+            ParameterSetName = 'New',
             Mandatory = $false,
             Position = 0,
             HelpMessage = 'Amount of words to get')]
@@ -61,7 +63,15 @@
             Mandatory = $false,
             HelpMessage = 'Return passphrase as object')]
         [switch]
-        $AsObject
+        $AsObject,
+
+        [Parameter(
+            ParameterSetName = 'Custom',
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            HelpMessage = 'Custom string to build passphrase object from')]
+        [string]
+        $CustomString
     )
     $ErrorActionPreference = 'Stop'
     $InformationPreference = 'Continue'
@@ -71,9 +81,13 @@
     Write-Verbose ('[{0}] Confirm={1} ConfirmPreference={2} WhatIf={3} WhatIfPreference={4}' -f $MyInvocation.MyCommand, $Confirm, $ConfirmPreference, $WhatIf, $WhatIfPreference)
     if ($PSCmdlet.ShouldProcess("Generates a new random passphrase")) {
         try {
-            [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
+            if ($PSBoundParameters.ContainsKey('CustomString')) {
+                $Passphrase = [Passphrase]::new($CustomString, $Separator)
+            } else {
+                [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
 
-            $Passphrase = [Passphrase]::new($Words, $AmountOfWords, $Separator)
+                $Passphrase = [Passphrase]::new($Words, $AmountOfWords, $Separator)
+            }
 
             if ($PSBoundParameters.ContainsKey('IncludeUppercase')) {
                 $Passphrase.AddUppercase()

@@ -86,7 +86,7 @@ Describe 'New-Passphrase Tests' {
             $PasswordString | Should -Match ([regex]::new('.*\s+.*'))
         }
         It 'Contains special character(s)' {
-            $PasswordString | Should -Match ([regex]::new('.[!"#$%&()*+,-./:;<=>?@\^_{|}].*'))
+            $PasswordString | Should -Match ([regex]::new('.[!"#$%&()*+,./:;<=>?@\^_{|}].*'))
         }
     }
 }
