@@ -242,8 +242,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### Inputs
 
-None
+System.Int32, System.Char, System.String
 
 ### Outputs
 
-System.String or PSObject
+System.String, System.Management.Automation.PSObject
