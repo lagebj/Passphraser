@@ -239,11 +239,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.Int32, System.Char, System.String
 
 ## OUTPUTS
 
-### System.String or System.Object
+### System.String, System.Management.Automation.PSObject
 
 ## NOTES
 
