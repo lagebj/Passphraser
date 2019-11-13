@@ -4,8 +4,8 @@
     Norwegian
 }
 
-static class Utility {
-    static [string]$DisplayTime(
+class Utility {
+    static [string ]DisplayTime(
         [double]$Seconds,
         [Translation]$Translation = [Translation]::English) {
         [long]$Minute = 60
@@ -16,24 +16,24 @@ static class Utility {
         [long]$Century = $Year * 100;
 
         if ($Seconds -lt $Minute) {
-            return GetTranslation('instant', $Translation)
+            return [Utility]::GetTranslation('instant', $Translation)
         } elseif ($Seconds -lt $Hour) {
-            return [string]::Format('{0} ' + $this.GetTranslation('minutes', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Minute)))
+            return [string]::Format('{0} ' + [Utility]::GetTranslation('minutes', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Minute)))
         } elseif ($Seconds -lt $Day) {
-            return [string]::Format('{0} ' + $this.GetTranslation('hours', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Hour)))
+            return [string]::Format('{0} ' + [Utility]::GetTranslation('hours', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Hour)))
         } elseif ($Seconds -lt $Month) {
-            return [string]::Format('{0} ' + $this.GetTranslation('days', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Day)))
+            return [string]::Format('{0} ' + [Utility]::GetTranslation('days', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Day)))
         } elseif ($Seconds -lt $Year) {
-            return [string]::Format('{0} ' + $this.GetTranslation('months', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Month)))
+            return [string]::Format('{0} ' + [Utility]::GetTranslation('months', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Month)))
         } elseif ($Seconds -lt $Century) {
-            return [string]::Format('{0} ' + $this.GetTranslation('years', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Year)))
+            return [string]::Format('{0} ' + [Utility]::GetTranslation('years', $Translation), (1 + [System.Math]::Ceiling($Seconds / $Year)))
         } else {
-            return $this.GetTranslation('centuries', $Translation)
+            return [Utility]::GetTranslation('centuries', $Translation)
         }
     }
 
-    hidden static [string]GetTranslation([string]$Matcher, [Translation]$Translation) {
-        [string]$Translated
+    hidden static [string] GetTranslation([string]$Matcher, [Translation]$Translation) {
+        [string]$Translated = ''
 
         switch ($Matcher) {
             'instant' {
@@ -161,419 +161,496 @@ static class Utility {
             }
         }
 
-            return $Translated
+        return $Translated
     }
 
-    static [string]$F([string]$String, [object[]]$Arguments) {
+    static [string]F([string]$String, [object[]]$Arguments) {
         return [string]::Format($String, $Arguments)
     }
 
-    static [string]$StringReverse([string]$String) {
+    static [string]StringReverse([string]$String) {
         [char[]]$StringArray = $String.ToCharArray()
         [array]::Reverse($StringArray)
         return $StringArray -join ''
     }
 
-    static [bool]IntParseSubstring([string]$String, [int]$StartIndex, [int]$Length, [int]$Result) {
-        return Int32.TryParse(str.Substring(startIndex, length), out r);
+    static [bool] IntParseSubstring([string]$String, [int]$StartIndex, [int]$Length, [ref]$Result) {
         return [int]::TryParse($String.Substring($StartIndex, $Length), [ref]$Result) 
     }
 
-            public static int ToInt(this string str)
-            {
-                int r = 0;
-                Int32.TryParse(str, out r);
-                return r;
-            }
-
-            public static IEnumerable<string> GetEmbeddedResourceLines(string resourceName)
-            {
-                var asm = Assembly.GetExecutingAssembly();
-                if (!asm.GetManifestResourceNames().Contains(resourceName)) return null; // Not an embedded resource
-
-                var lines = new List<string>();
-
-                using (var stream = asm.GetManifestResourceStream(resourceName))
-                using (var text = new StreamReader(stream))
-                {
-                    while (!text.EndOfStream) {
-                        lines.Add(text.ReadLine());
-                    }
-                }
-
-                return lines;
-            }
-
-            public static string GetWarning(Warning warning, Translation translation = Translation.English)
-            {
-                string translated;
-
-                switch (warning) {
-                    case Warning.StraightRow:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Straight rows of keys are easy to guess";
-                        break;
-                    }
-                    break;
-
-                    case Warning.ShortKeyboardPatterns:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Short keyboard patterns are easy to guess";
-                        break;
-                    }
-                    break;
-
-                    case Warning.RepeatsLikeAaaEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Repeats like \"aaa\" are easy to guess";
-                        break;
-                    }
-                    break;
-
-                    case Warning.RepeatsLikeAbcSlighterHarder:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"";
-                        break;
-                    }
-                    break;
-                    case Warning.SequenceAbcEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Sequences like abc or 6543 are easy to guess";
-                        break;
-                    }
-                    break;
-                    case Warning.RecentYearsEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Recent years are easy to guess";
-                        break;
-                    }
-                    break;
-                    case Warning.DatesEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Dates are often easy to guess";
-                        break;
-                    }
-                    break;
-                    case Warning.Top10Passwords:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "This is a top-10 common password";
-                        break;
-                    }
-                    break;
-                    case Warning.Top100Passwords:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "This is a top-100 common password";
-                        break;
-                    }
-                    break;
-                    case Warning.CommonPasswords:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "This is a very common password";
-                        break;
-                    }
-                    break;
-                    case Warning.SimilarCommonPasswords:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "This is similar to a commonly used password";
-                        break;
-                    }
-                    break;
-                    case Warning.WordEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "A word by itself is easy to guess";
-                        break;
-                    }
-                    break;
-                    case Warning.NameSurnamesEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Names and surnames by themselves are easy to guess";
-                        break;
-                    }
-                    break;
-                    case Warning.CommonNameSurnamesEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Common names and surnames are easy to guess";
-                        break;
-                    }
-                    break;
-
-                    case Warning.Empty:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "";
-                        break;
-                    }
-                    break;
-
-                    default:
-                    translated = "";
-                    break;
-                }
-                return translated;
-            }
-
-            public static string GetSuggestion(Suggestion suggestion, Translation translation = Translation.English)
-            {
-                string translated;
-
-                switch (suggestion) {
-                    case Suggestion.AddAnotherWordOrTwo:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Add another word or two. Uncommon words are better.";
-                        break;
-                    }
-                    break;
-
-                    case Suggestion.UseLongerKeyboardPattern:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Use a longer keyboard pattern with more turns";
-                        break;
-                    }
-                    break;
-
-                    case Suggestion.AvoidRepeatedWordsAndChars:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Avoid repeated words and characters";
-                        break;
-                    }
-                    break;
-
-                    case Suggestion.AvoidSequences:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Avoid sequences";
-                        break;
-                    }
-                    break;
-                    case Suggestion.AvoidYearsAssociatedYou:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Avoid recent years \n Avoid years that are associated with you";
-                        break;
-                    }
-                    break;
-                    case Suggestion.AvoidDatesYearsAssociatedYou:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Avoid dates and years that are associated with you";
-                        break;
-                    }
-                    break;
-                    case Suggestion.CapsDontHelp:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Capitalization doesn't help very much";
-                        break;
-                    }
-                    break;
-                    case Suggestion.AllCapsEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "All-uppercase is almost as easy to guess as all-lowercase";
-                        break;
-                    }
-                    break;
-                    case Suggestion.ReversedWordEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Reversed words aren't much harder to guess";
-                        break;
-                    }
-                    break;
-                    case Suggestion.PredictableSubstitutionsEasy:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "Predictable substitutions like '@' instead of 'a' don't help very much";
-                        break;
-                    }
-                    break;
-
-                    case Suggestion.Empty:
-                    switch (translation) {
-                        case Translation.German:
-                        translated = "";
-                        break;
-                        case Translation.France:
-                        translated = "";
-                        break;
-                        default:
-                        translated = "";
-                        break;
-                    }
-                    break;
-                    default:
-                    translated = "Use a few words, avoid common phrases \n No need for symbols, digits, or uppercase letters";
-                    break;
-                }
-                return translated;
-            }
-
-        }
+    static [int]ToInt([string]$String)
+    {
+        [int]$Result = 0;
+        [int]::TryParse($String,[ref]$Result)
+        return $Result
     }
+
+    static [System.Collections.Generic.IEnumerable[string]] GetEmbeddedResourceLines([string]$ResourceName) {
+        $Assembly = [System.Reflection.Assembly]::GetExecutingAssembly()
+        if (-not $Assembly.GetManifestResourceNames().Contains($ResourceName)) {
+            return $null
+        }
+
+        [System.Collections.Generic.List[string]]$Lines = @()
+
+        $Stream = $Assembly.GetManifestResourceStream($ResourceName)
+        $Text = [System.IO.StreamReader]::new($Stream)
+
+        while (-not $Text.EndOfStream) {
+            $Lines.Add($Text.ReadLine())
+        }
+
+        return $Lines
+    }
+
+    static [string] GetWarning([Warning]$Warning, [Translation]$Translation = [Translation]::English) {
+        [string]$Translated = ''
+
+        switch ($Warning) {
+            ([Warning]::StraightRow) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Straight rows of keys are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::ShortKeyboardPatterns) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Short keyboard patterns are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::RepeatsLikeAaaEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Repeats like "aaa" are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::RepeatsLikeAbcSlighterHarder) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Repeats like "abcabcabc" are only slightly harder to guess than "abc"'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::SequenceAbcEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Sequences like abc or 6543 are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::RecentYearsEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Recent years are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::DatesEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Dates are often easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::Top10Passwords) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'This is a top 10 common password'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::Top100Passwords) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'This is a top 100 common password'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::CommonPasswords) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'This is a very common password'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::WordEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'A word by itself is easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::NameSurnamesEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Names and surnames by themselves are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::CommonNameSurnamesEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Common names and surnames are easy to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Warning]::Empty) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = ''
+                        break
+                    }
+                }
+                break
+            }
+            default {
+                $Translated = ''
+                break
+            }
+        }
+        return $Translated
+    }
+
+    static [string]GetSuggestion([Suggestion]$Suggestion, [Translation]$Translation = [Translation]::English) {
+        [string]$Translated = ''
+
+        switch ($Suggestion) {
+            ([Suggestion]::AddAnotherWordOrTwo) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Add another word or two. Uncommon words are better.'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::UseLongerKeyboardPattern) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Use a longer keyboard pattern with more turns'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::AvoidRepeatedWordsAndChars) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Avoid repeated words and characters'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::AvoidSequences) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Avoid sequences'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::AvoidYearsAssociatedYou) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Avoid recent years and avoid years that are associated with you'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::AvoidDatesYearsAssociatedYou) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Avoid dates and years that are associated with you'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::CapsDontHelp) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Capitalization does not help very much'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::AllCapsEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'All uppercase is almost as easy to guess as all lowercase'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::ReversedWordEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Reversed words are not much harder to guess'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::PredictableSubstitutionsEasy) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = 'Predictable substitutions like "@" instead of "a" do not help very much'
+                        break
+                    }
+                }
+                break
+            }
+            ([Suggestion]::Empty) {
+                switch ($Translation) {
+                    ([Translation]::German) {
+                        $Translated = ''
+                        break
+                    }
+                    ([Translation]::Norwegian) {
+                        $Translated = ''
+                        break
+                    }
+                    default {
+                        $Translated = ''
+                        break
+                    }
+                }
+                break
+            }
+            default {
+                $Translated = 'Use a few words, avoid common phrases. No need for symbols, digits, or uppercase letters.'
+                break
+            }
+            
+        }
+
+        return $Translated
+    }
+}

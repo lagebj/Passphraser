@@ -25,7 +25,15 @@
     # ProcessorArchitecture = ''
     # RequiredModules = @()
     # RequiredAssemblies = @()
-    ScriptsToProcess = @(
+    ScriptsToProcess  = @(
+        '.\classes\Match.Class.ps1',
+        '.\classes\Result.Class.ps1',
+        '.\classes\Utility.Class.ps1',
+        '.\classes\IMatcher.Class.ps1',
+        '.\classes\DateMatch.Class.ps1',
+        '.\classes\DictionaryMatch.Class.ps1',
+        '.\classes\DateMatcher.Class.ps1',
+        '.\classes\DictionaryMatcher.Class.ps1'
         '.\classes\Passphrase.Class.ps1'
     )
     # TypesToProcess = @()
