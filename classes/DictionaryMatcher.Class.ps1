@@ -6,12 +6,12 @@
 
     DictionaryMatcher([string]$Name, [string]$WordListPath) {
         $this.DictionaryName = $Name
-        $this.RankedDictionary = new Lazy<Dictionary<string, int>>(() => BuildRankedDictionary(wordListPath));
+        $this.RankedDictionary = $this.BuildRankedDictionary($WordListPath)
     }
 
     DictionaryMatcher([string]$Name, [System.Collections.Generic.IEnumerable[string]]$WordList) {
         $this.DictionaryName = $Name
-        $this.RankedDictionary = new Lazy<Dictionary<string, int>>(() => BuildRankedDictionary(wordList.Select(w => w.ToLower())));
+        $this.RankedDictionary = $this.BuildRankedDictionary($WordList.Select(w => w.ToLower()))
     }
 
     [System.Collections.Generic.IEnumerable[Match]]MatchPassword([string]$Password) {
@@ -49,22 +49,19 @@
     }
 
     hidden [System.Collections.Generic.Dictionary[string, int]]BuildRankedDictionary([string]$WordListFile) {
-        $Lines = Utility.GetEmbeddedResourceLines("Zxcvbn.Dictionaries.{0}".F($WordListFile)) ?? File.ReadAllLines(wordListFile);
+        $Lines = [Utility]::GetEmbeddedResourceLines("Zxcvbn.Dictionaries.{0}".F($WordListFile)) ?? File.ReadAllLines(wordListFile);
 
         return BuildRankedDictionary(lines);
     }
 
-        private Dictionary<string, int> BuildRankedDictionary(IEnumerable<string> wordList)
-        {
-            var dict = new Dictionary<string, int>();
+    hidden [System.Collections.Generic.Dictionary[string, int]]BuildRankedDictionary([System.Collections.Generic.IEnumerable[string]]$WordList) {
+        [System.Collections.Generic.Dictionary[string, int]]$Dict = @{}
 
-            var i = 1;
-            foreach (var word in wordList)
-            {
-                // The word list is assumed to be in increasing frequency order
-                dict[word] = i++;
-            }
-
-            return dict;
+        [int]$i = 1
+        foreach (var word in wordList) {
+            $Dict[word] = $i++
         }
+
+            return $Dict
     }
+}
