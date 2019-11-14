@@ -1,7 +1,7 @@
 class Zxcvbn {
-    hidden [string]$BruteforcePattern = 'bruteforce'
-    hidden [IMatcherFactory]$MatcherFactory
-    hidden [Translation]$Translation
+    hidden [string] $BruteforcePattern = 'bruteforce'
+    hidden [IMatcherFactory] $MatcherFactory
+    hidden [Translation] $Translation
 
     Zxcvbn([Translation] $Translation = [Translation]::English) : base([DefaultMatcherFactory]::new()) {
         $this.Translation = $Translation
@@ -21,7 +21,7 @@ class Zxcvbn {
         
         $Timer = [System.Diagnostics.Stopwatch]::StartNew()
         
-        foreach ($Matcher in $MatcherFactory.CreateMatchers($UserInputs)) {
+        foreach ($Matcher in $this.MatcherFactory.CreateMatchers($UserInputs)) {
             $Matches = $Matches.Union($Matcher.MatchPassword($Password))
         }
 

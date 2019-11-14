@@ -1,29 +1,16 @@
 ﻿class L33tMatcher : IMatcher {
         hidden [System.Collections.Generic.List[DictionaryMatcher]] $DictionaryMatchers
-        hidden [Dictionary[char, string]] $Substitutions
+        hidden [System.Collections.Generic.Dictionary[char, string]] $Substitutions
 
         L33tMatcher([System.Collections.Generic.List[DictionaryMatcher]] $DictionaryMatchers) {
             $this.DictionaryMatchers = $DictionaryMatchers
             $Substitutions = $this.BuildSubstitutionsMap
         }
 
-        L33tMatcher([DictionaryMatcher] $DictionaryMatcher) : base([System.Collections.Generic.List[DictionaryMatcher]]{ $DictionaryMatcher }) {}
+        L33tMatcher([DictionaryMatcher] $DictionaryMatcher) : base([System.Collections.Generic.List[DictionaryMatcher]]{$DictionaryMatchers}) {}
 
         [System.Collections.Generic.IEnumerable[Match]] MatchPassword([string] $Password) {
             $Subs = $this.EnumerateSubtitutions($this.GetRelevantSubstitutions($Password))
-
-            $Matches = (from $SubDict in $Subs
-                          let sub_password = TranslateString(subDict, password)
-                          from matcher in dictionaryMatchers
-                          from match in matcher.MatchPassword(sub_password).OfType<DictionaryMatch>()
-                          let token = password.Substring(match.i, match.j - match.i + 1)
-                          let usedSubs = subDict.Where(kv => token.Contains(kv.Key)) // Count subs ised in matched token
-                          where usedSubs.Count() > 0 // Only want matches where substitutions were used
-                          select new L33tDictionaryMatch(match)
-                          {
-                              Token = token,
-                              Subs = usedSubs.ToDictionary(kv => kv.Key, kv => kv.Value)
-                          }).ToList();
 
             $Matches = (
                 foreach ($SubDict in $Subs) {
@@ -32,10 +19,15 @@
                         foreach ($Match in $Matcher.MatchPassword($sub_password).OfType([DictionaryMatch])) {
                             $Token = $Password.Substring($Match.i, ($Match.j - $Match.i + 1))
                             $UsedSubs = $SubDict | Where-Object {$Token.Contains($_.Key)}
+                            if ($UsedSubs.Count -gt 0) {
+                                [L33tDictionaryMatch]::new($Match = @{
+                                    Token = $Token
+                                    Subs = $UsedSubs.ToDictionary($_.Key, $_.Value)
+                                })
+                            }
                         }
                     }
-                }
-            )
+                }).ToList
 
             foreach ($Match in $Matches) {
                 $this.CalulateL33tEntropy($Match)
@@ -44,44 +36,46 @@
             return $Matches
         }
 
-        private void CalulateL33tEntropy(L33tDictionaryMatch match)
-        {
-            // I'm a bit dubious about this function, but I have duplicated zxcvbn functionality regardless
+        hidden [void] CalulateL33tEntropy([L33tDictionaryMatch] $Match) {
+            $Possibilities = 0
 
-            var possibilities = 0;
+            foreach ($kvp in $Match.Subs) {
+                $SubbedChars = ($Match.Token | Where-Object {$_ -eq $kvp.Key}).Count
+                $UnsubbedChars = ($Match.Token | Where-Object {$_ -eq $kvp.Value}).Count
 
-            foreach (var kvp in match.Subs)
-            {
-                var subbedChars = match.Token.Where(c => c == kvp.Key).Count();
-                var unsubbedChars = match.Token.Where(c => c == kvp.Value).Count(); // Won't this always be zero?
-
-                possibilities += Enumerable.Range(0, Math.Min(subbedChars, unsubbedChars) + 1).Sum(i => (int)PasswordScoring.Binomial(subbedChars + unsubbedChars, i));
+                $Possibilities += [int][PasswordScoring]::Binomial($SubbedChars + $UnsubbedChars, $Sum)
+                $Sum = [System.Linq.Enumerable]::Sum([System.Linq.Enumerable]::Range(0, [System.Math]::Min($SubbedChars, $UnsubbedChars) + 1))
             }
 
-            var entropy = Math.Log(possibilities, 2);
+            $Entropy = [System.Math]::Log($Possibilities, 2)
 
-            // In the case of only a single subsitution (e.g. 4pple) this would otherwise come out as zero, so give it one bit
-            match.L33tEntropy = (entropy < 1 ? 1 : entropy);
-            match.Entropy += match.L33tEntropy;
+            $Match.L33tEntropy = (
+                if ($Entropy -lt 1) {
+                    return 1
+                } else {
+                    $Entropy
+                })
+            $Match.Entropy += $Match.L33tEntropy
 
-            // We have to recalculate the uppercase entropy -- the password matcher will have used the subbed password not the original text
-            match.Entropy -= match.UppercaseEntropy;
-            match.UppercaseEntropy = PasswordScoring.CalculateUppercaseEntropy(match.Token);
-            match.Entropy += match.UppercaseEntropy;
+            $Match.Entropy -= $Match.UppercaseEntropy
+            $Match.UppercaseEntropy = [PasswordScoring]::CalculateUppercaseEntropy($Match.Token)
+            $Match.Entropy += $Match.UppercaseEntropy
         }
 
-        private string TranslateString(Dictionary<char, char> charMap, string str)
-        {
-            // Make substitutions from the character map wherever possible
-            return new String(str.Select(c => charMap.ContainsKey(c) ? charMap[c] : c).ToArray());
+        hidden [string] TranslateString([System.Collections.Generic.Dictionary[char, char]] $CharMap, [string] $String) {
+            $StringArray = $String.Split('').ToCharArray()
+            [string]$String = $StringArray | ForEach-Object {
+                if ($CharMap.ContainsKey($_)) {
+                    $CharMap[$_]
+                } else {
+                    $_
+                }
+            }
+            return $String
         }
 
-        private Dictionary<char, string> GetRelevantSubstitutions(string password)
-        {
-            // Return a map of only the useful substitutions, i.e. only characters that the password
-            //   contains a substituted form of
-            return substitutions.Where(kv => kv.Value.Any(lc => password.Contains(lc)))
-                                .ToDictionary(kv => kv.Key, kv => new String(kv.Value.Where(lc => password.Contains(lc)).ToArray()));
+XXX        hidden [System.Collections.Generic.Dictionary[char, string]] GetRelevantSubstitutions([string] $Password) {
+            return ($this.Substitutions | Where-Object {$_.Value.Any | Where-Object {$Password.Contains($_)}}).ToDictionary() .Where(kv => kv.Value.Any(lc => password.Contains(lc))).ToDictionary(kv => kv.Key, kv => new String(kv.Value.Where(lc => password.Contains(lc)).ToArray()));
         }
 
         private List<Dictionary<char, char>> EnumerateSubtitutions(Dictionary<char, string> table)
