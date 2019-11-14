@@ -1,18 +1,18 @@
 ﻿class DateMatcher {
-    [string]$DatePattern = 'date'
+    [string] $DatePattern = 'date'
 
-    [string]$DateWithSlashesSuffixPattern = [regex]::new(
+    [string] $DateWithSlashesSuffixPattern = [regex]::new(
         '(\d{1,2})(\s|-|/|\\|_|\.)(\d{1,2})\2(19\d{2}|200\d|201\d|\d{2})'
     )
 
-    [string]$DateWithSlashesPrefixPattern = [regex]::new(
+    [string] $DateWithSlashesPrefixPattern = [regex]::new(
         '(19\d{2}|200\d|201\d|\d{2})(\s|-|/|\\|_|\.)(\d{1,2})\2(\d{1,2})'
     )
 
-    [System.Collections.Generic.IEnumerable[Match]]MatchPassword([string]$Password) {
-        [System.Collections.Generic.List[Match]]$Matches = @()
+    [System.Collections.Generic.IEnumerable[Match]] MatchPassword([string] $Password) {
+        [System.Collections.Generic.List[Match]] $Matches = @()
 
-        [System.Text.RegularExpressions.MatchCollection]$PossibleDates = [regex]::Matches($Password, '\d{4,8}')
+        [System.Text.RegularExpressions.MatchCollection] $PossibleDates = [regex]::Matches($Password, '\d{4,8}')
         foreach ($DateMatch in $PossibleDates) {
             if ($this.IsDate($DateMatch.Value)) {
                 $Match = [Match]::new()
@@ -25,16 +25,16 @@
             }
         }
 
-        [System.Text.RegularExpressions.MatchCollection]$SlashDatesSuffix = [regex]::Matches($Password, $this.DateWithSlashesSuffixPattern, [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
+        [System.Text.RegularExpressions.MatchCollection] $SlashDatesSuffix = [regex]::Matches($Password, $this.DateWithSlashesSuffixPattern, [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
         foreach ($DateMatch in $SlashDatesSuffix) {
-            [int]$Year = $DateMatch.Groups[4].Value
-            [int]$Month = $DateMatch.Groups[3].Value
-            [int]$Day = $DateMatch.Groups[1].Value
+            [int] $Year = $DateMatch.Groups[4].Value
+            [int] $Month = $DateMatch.Groups[3].Value
+            [int] $Day = $DateMatch.Groups[1].Value
 
             if (12 -le $Month -and $Month -le 31 -and $Day -le 12) {
-                [int]$T = $Month
-                [int]$Month = $Day
-                [int]$Day = $T
+                [int] $T = $Month
+                [int] $Month = $Day
+                [int] $Day = $T
             }
 
             if ($this.IsDateInRange($Year, $Month, $Day)) {
@@ -52,16 +52,16 @@
             }
         }
 
-        [System.Text.RegularExpressions.MatchCollection]$SlashDatesPrefix = [regex]::Matches($Password, $this.DateWithSlashesPrefixPattern, [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
+        [System.Text.RegularExpressions.MatchCollection] $SlashDatesPrefix = [regex]::Matches($Password, $this.DateWithSlashesPrefixPattern, [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
         foreach ($DateMatch in $SlashDatesPrefix) {
-            [int]$Year = $DateMatch.Groups[1].Value
-            [int]$Month = $DateMatch.Groups[3].Value
-            [int]$Day = $DateMatch.Groups[4].Value
+            [int] $Year = $DateMatch.Groups[1].Value
+            [int] $Month = $DateMatch.Groups[3].Value
+            [int] $Day = $DateMatch.Groups[4].Value
 
             if (12 -le $Month -and $Month -le 31 -and $Day -le 12) {
-                [int]$T = $Month
-                [int]$Month = $Day
-                [int]$Day = $T
+                [int] $T = $Month
+                [int] $Month = $Day
+                [int] $Day = $T
             }
 
             if ($this.IsDateInRange($Year, $Month, $Day)) {
@@ -81,7 +81,7 @@
         return $Matches
     }
 
-    hidden [double] CalculateEntropy([string]$Match, [System.Nullable[int]]$Year, [bool]$Separator) {
+    hidden [double] CalculateEntropy([string] $Match, [System.Nullable[int]] $Year, [bool] $Separator) {
         if ($null -ne $Year) {
             if ($Match.Length -le 6) {
                 $Year = 99
@@ -89,7 +89,7 @@
                 $Year = 9999
             }
         }
-        [double]$Entropy = 0
+        [double] $Entropy = 0
         if ($Year -lt 100) {
             $Entropy = [System.Math]::Log(31 * 12 * 100, 2)
         } else {
@@ -102,8 +102,8 @@
         return $Entropy
     }
 
-    hidden [bool] IsDate([string]$Match) {
-        [bool]$IsValid = $false
+    hidden [bool] IsDate([string] $Match) {
+        [bool] $IsValid = $false
 
         if ($Match.Length -le 6) {
             $IsValid -bor $this.IsDateWithYearType($Match, $true, 2)
@@ -116,12 +116,12 @@
         return $IsValid
     }
     
-    hidden [bool] IsDateWithYearType([string]$Match, [bool]$Suffix, [int]$YearLength) {
-        [int]$Year = 0
+    hidden [bool] IsDateWithYearType([string] $Match, [bool] $Suffix, [int] $YearLength) {
+        [int] $Year = 0
         if ($Suffix) {
-            [Utility]::IntParseSubstring($Match, ($Match.Length - $YearLength), $YearLength, [ref]$Year)
+            [Utility]::IntParseSubstring($Match, ($Match.Length - $YearLength), $YearLength, [ref] $Year)
         } else {
-            [Utility]::IntParseSubstring($Match, 0, $YearLength, [ref]$Year)
+            [Utility]::IntParseSubstring($Match, 0, $YearLength, [ref] $Year)
         }
 
         if ($Suffix) {
@@ -139,9 +139,9 @@
         }
     }
 
-    hidden [bool] IsDayMonthString([string]$Match) {
-        [int]$p1 = 0
-        [int]$p2 = 0
+    hidden [bool] IsDayMonthString([string] $Match) {
+        [int] $p1 = 0
+        [int] $p2 = 0
             
         if ($Match.Length -eq 2) {
             [Utility]::IntParseSubstring($Match, 0, 1, [ref]$p1)
@@ -168,7 +168,7 @@
         }
     }
 
-    hidden [bool] IsDateInRange([int]$Year, [int]$Month, [int]$Day) {
+    hidden [bool] IsDateInRange([int] $Year, [int] $Month, [int] $Day) {
         if ($this.IsYearInRange($Year) -and $this.IsMonthDayInRange($Month, $Day)) {
             return $true
         } else {
@@ -176,7 +176,7 @@
         }
     }
 
-    hidden [bool] IsYearInRange([int]$Year) {
+    hidden [bool] IsYearInRange([int] $Year) {
         if ((1900 -le $Year -and $Year -le 2019) -or (0 -lt $Year -and $Year -le 99)) {
             return $true
         } else {
@@ -184,7 +184,7 @@
         }
     }
     
-    hidden [bool] IsMonthDayInRange([int]$Month, [int]$Day) {
+    hidden [bool] IsMonthDayInRange([int] $Month, [int] $Day) {
         if (1 -le $Month -and $Month -le 12 -and 1 -le $Day -and $Day -le 31) {
             return $true
         } else {
