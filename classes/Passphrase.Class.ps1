@@ -1,6 +1,4 @@
-﻿#Requires -Assembly '.\Zxcvbn.dll'
-
-class Passphrase : Zxcvbn.Result {
+﻿class Passphrase : Zxcvbn.Result {
     [ValidateCount(
         0,
         3065)]
@@ -50,14 +48,14 @@ class Passphrase : Zxcvbn.Result {
         [string[]] $WordsArray = $Passphrase.Split($Separator)
 
         [string[]] $WordsWithNumbers = $WordsArray -match '\d'
-        [int[]] $NumbersFound = $WordsWithNumbers -replace '\D',''
+        [int[]] $NumbersFound = $WordsWithNumbers -replace '\D', ''
         $NumbersFound | ForEach-Object {
             [int[]] (($_ -split '') -ne '') | ForEach-Object {
                 $this.Numbers.Add($_)
             }
         }
         $WordsWithNumbers | ForEach-Object {
-            $WordsArray = $WordsArray.Replace($_, ($_ -replace '\d',''))
+            $WordsArray = $WordsArray.Replace($_, ($_ -replace '\d', ''))
         }
 
         [string[]] $WordsWithSpecials = $WordsArray -match '[^A-Za-z0-9]+'
@@ -68,7 +66,7 @@ class Passphrase : Zxcvbn.Result {
             }
         }
         $WordsWithSpecials | ForEach-Object {
-            $WordsArray = $WordsArray.Replace($_, ($_ -replace '[^A-Za-z0-9]+',''))
+            $WordsArray = $WordsArray.Replace($_, ($_ -replace '[^A-Za-z0-9]+', ''))
         }
 
         [string[]] $WordsUppercase = $WordsArray -cmatch '[A-Z]+'
@@ -333,7 +331,7 @@ class Passphrase : Zxcvbn.Result {
     }
 
     [string] ToString() {
-        [string[]] $WordsArray = $this.Words | Sort-Object {Get-Random}
+        [string[]] $WordsArray = $this.Words | Sort-Object { Get-Random }
 
         if ($this.IncludeUppercase) {
             [string] $Word = $WordsArray | Get-Random
@@ -345,8 +343,8 @@ class Passphrase : Zxcvbn.Result {
             [string] $Word = $WordsArray | Get-Random
 
             [int] $Placement = @(
-                    0,
-                    $Word.Length) | Get-Random
+                0,
+                $Word.Length) | Get-Random
 
             [string] $WordWithNumber = $Word.Insert($Placement, $Num)
 
@@ -357,8 +355,8 @@ class Passphrase : Zxcvbn.Result {
             [string] $Word = $WordsArray | Get-Random
 
             [int] $Placement = @(
-                    0,
-                    $Word.Length) | Get-Random
+                0,
+                $Word.Length) | Get-Random
 
             [string] $WordWithSpecial = $Word.Insert($Placement, $Char)
 

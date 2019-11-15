@@ -8,5 +8,10 @@ November 11, 2019
 - Added additional properties, methods and constructors to Passphrase class.
 - Added signed catalog file and signed scripts.
 
+November 15, 2019
+- Removed GetStrength method from Passphrase class
+- Add Zxcvbn-cs support in Passphrase class to calculate passphrase entropy. See https://github.com/mickford/zxcvbn-cs.
+- Updated major version due to breaking changes
+
 ### Feedback
 Please send your feedback to http://github.com/lagebj/Passphraser/issues
