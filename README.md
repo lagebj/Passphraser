@@ -1,7 +1,7 @@
 # Passphraser
 [![Build status](https://ci.appveyor.com/api/projects/status/ngc5lu82m332pgps?svg=true)](https://ci.appveyor.com/project/lagebj/passphraser)
 
-Powershell passphrase generator for lazy admins
+This is a Powershell passphrase generator.
 
 ## Getting Started
 
