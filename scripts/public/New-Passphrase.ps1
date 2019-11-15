@@ -2,76 +2,78 @@
     [CmdletBinding(
         SupportsShouldProcess,
         ConfirmImpact = 'Low',
-        DefaultParameterSetName = 'New')]
+        DefaultParameterSetName = 'New'
+    )]
 
     [OutputType(
         [string],
-        [psobject])]
+        [PassphraseObject]
+    )]
 
     Param (
         [Parameter(
             ParameterSetName = 'New',
             Mandatory = $false,
             Position = 0,
-            HelpMessage = 'Amount of words to get')]
+            HelpMessage = 'Amount of words to get'
+        )]
         [ValidateNotNullOrEmpty()]
-        [int]
-        $AmountOfWords = 3,
+        [int] $AmountOfWords = 3,
 
         [Parameter(
             Mandatory = $false,
             Position = 3,
-            HelpMessage = 'Separator to use between words')]
+            HelpMessage = 'Separator to use between words'
+        )]
         [ValidateNotNullOrEmpty()]
-        [char]
-        $Separator = " ",
+        [char] $Separator = ' ',
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Includes numbers')]
-        [switch]
-        $IncludeNumbers,
+            HelpMessage = 'Includes numbers'
+        )]
+        [switch] $IncludeNumbers,
 
         [Parameter(
             Mandatory = $false,
             Position = 1,
-            HelpMessage = 'Amount of numbers to include')]
+            HelpMessage = 'Amount of numbers to include'
+        )]
         [ValidateNotNullOrEmpty()]
-        [int]
-        $AmountOfNumbers = 1,
+        [int] $AmountOfNumbers = 1,
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Include an uppercase word')]
-        [switch]
-        $IncludeUppercase,
+            HelpMessage = 'Include an uppercase word'
+        )]
+        [switch] $IncludeUppercase,
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Include special characters')]
-        [switch]
-        $IncludeSpecials,
+            HelpMessage = 'Include special characters'
+        )]
+        [switch] $IncludeSpecials,
 
         [Parameter(
             Mandatory = $false,
             Position = 2,
-            HelpMessage = 'Amount of special characters to include')]
-        [int]
-        $AmountOfSpecials = 1,
+            HelpMessage = 'Amount of special characters to include'
+        )]
+        [int] $AmountOfSpecials = 1,
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Return passphrase as object')]
-        [switch]
-        $AsObject,
+            HelpMessage = 'Return passphrase as object'
+        )]
+        [switch] $AsObject,
 
         [Parameter(
             ParameterSetName = 'Custom',
             Mandatory = $true,
             ValueFromPipeline = $true,
-            HelpMessage = 'Custom string to build passphrase object from')]
-        [string]
-        $CustomString
+            HelpMessage = 'Custom string to build passphrase object from'
+        )]
+        [string] $CustomString
     )
     $ErrorActionPreference = 'Stop'
     $InformationPreference = 'Continue'
@@ -79,32 +81,32 @@
     if (-not $PSBoundParameters.ContainsKey('Confirm')) { $ConfirmPreference = $PSCmdlet.SessionState.PSVariable.GetValue('ConfirmPreference') }
     if (-not $PSBoundParameters.ContainsKey('WhatIf')) { $WhatIfPreference = $PSCmdlet.SessionState.PSVariable.GetValue('WhatIfPreference') }
     Write-Verbose ('[{0}] Confirm={1} ConfirmPreference={2} WhatIf={3} WhatIfPreference={4}' -f $MyInvocation.MyCommand, $Confirm, $ConfirmPreference, $WhatIf, $WhatIfPreference)
-    if ($PSCmdlet.ShouldProcess("Generates a new random passphrase")) {
+    if ($PSCmdlet.ShouldProcess("Generates a new random passphrase as a string or object")) {
         try {
             if ($PSBoundParameters.ContainsKey('CustomString')) {
-                $Passphrase = [Passphrase]::new($CustomString, $Separator)
+                $PassphraseObject = [PassphraseObject]::new($CustomString, $Separator)
             } else {
-                [array]$Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
+                [array] $Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
 
-                $Passphrase = [Passphrase]::new($Words, $AmountOfWords, $Separator)
+                $PassphraseObject = [PassphraseObject]::new($Words, $AmountOfWords, $Separator)
             }
 
             if ($PSBoundParameters.ContainsKey('IncludeUppercase')) {
-                $Passphrase.AddUppercase()
+                $PassphraseObject.AddUppercase()
             }
 
             if ($PSBoundParameters.ContainsKey('IncludeNumbers')) {
-                $Passphrase.AddNumber($AmountOfNumbers)
+                $PassphraseObject.AddNumber($AmountOfNumbers)
             }
 
             if ($PSBoundParameters.ContainsKey('IncludeSpecials')) {
-                $Passphrase.AddSpecial($AmountOfSpecials)
+                $PassphraseObject.AddSpecial($AmountOfSpecials)
             }
 
             if ($PSBoundParameters.ContainsKey('AsObject')) {
-                return $Passphrase
+                return $PassphraseObject
             } else {
-                return $Passphrase.ToString()
+                return $PassphraseObject.ToString()
             }
         } catch {
             $PSCmdlet.throwTerminatingError($PSItem)
