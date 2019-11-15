@@ -4,7 +4,7 @@
 
 @{
     RootModule        = 'Passphraser.psm1'
-    ModuleVersion     = '1.0.8'
+    ModuleVersion     = '2.0.0'
     GUID              = 'b40097d7-bc39-4f92-a85d-cc5e39be939a'
     Author            = 'Lage Berger Jensen'
     CompanyName       = ''
@@ -24,8 +24,10 @@
     # CLRVersion = ''
     # ProcessorArchitecture = ''
     # RequiredModules = @()
-    # RequiredAssemblies = @()
-    ScriptsToProcess = @(
+    RequiredAssemblies = @(
+        '.\classes\Zxcvbn.dll'
+    )
+    ScriptsToProcess  = @(
         '.\classes\Passphrase.Class.ps1'
     )
     # TypesToProcess = @()
@@ -40,7 +42,9 @@
                 'passphraser'
                 'passphrase',
                 'password',
-                'generator'
+                'generator',
+                'entropy,',
+                'crack'
             )
             LicenseUri = 'https://github.com/lagebj/Passphraser/blob/master/LICENSE'
             ProjectUri = 'https://github.com/lagebj/Passphraser'
