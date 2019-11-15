@@ -246,4 +246,4 @@ System.Int32, System.Char, System.String
 
 ### Outputs
 
-System.String, System.Management.Automation.PSObject
+System.String, PassphraseObject

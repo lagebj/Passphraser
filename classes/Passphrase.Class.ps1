@@ -1,27 +1,21 @@
-﻿class Passphrase : Zxcvbn.Result {
-    [ValidateCount(
-        0,
-        3065)]
-    [System.Collections.Generic.List[string]]$Words = @()
+﻿class PassphraseObject : Zxcvbn.Result {
+    [ValidateCount(0, 3065)]
+    [System.Collections.Generic.List[string]] $Words = @()
 
-    [ValidateRange(
-        0,
-        9)]
-    [System.Collections.Generic.List[int]]$Numbers = @()
+    [ValidateRange(0, 9)]
+    [System.Collections.Generic.List[int]] $Numbers = @()
 
-    [ValidatePattern(
-        '[!"#$%&()*+,./:;<=>?@\^_{|}]')]
-    [System.Collections.Generic.List[char]]$Specials = @()
+    [ValidatePattern('[!"#$%&()*+,./:;<=>?@\^_{|}]')]
+    [System.Collections.Generic.List[char]] $Specials = @()
 
     [ValidateNotNullOrEmpty()]
-    [char]$Separator
+    [char] $Separator
 
-    [bool]$IncludeUppercase = $false
+    [bool] $IncludeUppercase = $false
 
-    [int]$Length
+    [int] $Length
 
-    Passphrase(
-        [string[]]$Words) {
+    PassphraseObject([string[]] $Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -44,7 +38,7 @@
         $this.Suggestions = $Zxcvbn.suggestions
     }
 
-    Passphrase([string] $Passphrase, [char] $Separator) {
+    PassphraseObject([string] $Passphrase, [char] $Separator) {
         [string[]] $WordsArray = $Passphrase.Split($Separator)
 
         [string[]] $WordsWithNumbers = $WordsArray -match '\d'
@@ -99,7 +93,7 @@
         $this.Suggestions = $Zxcvbn.suggestions
     }
 
-    Passphrase([string[]] $Words, [int] $AmountOfWords, [char] $Separator) {
+    PassphraseObject([string[]] $Words, [int] $AmountOfWords, [char] $Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
@@ -122,7 +116,7 @@
         $this.Suggestions = $Zxcvbn.suggestions
     }
 
-    Passphrase([string[]] $Words, [int] $AmountOfWords, [char] $Separator, [int] $AmountOfNumbers, [int] $AmountOfSpecials, [bool] $IncludeUppercase) {
+    PassphraseObject([string[]] $Words, [int] $AmountOfWords, [char] $Separator, [int] $AmountOfNumbers, [int] $AmountOfSpecials, [bool] $IncludeUppercase) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
             $this.Words.Add($_)
         }
