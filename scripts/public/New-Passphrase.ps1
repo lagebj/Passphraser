@@ -73,7 +73,15 @@
             ValueFromPipeline = $true,
             HelpMessage = 'Custom string to build passphrase object from'
         )]
-        [string] $CustomString
+        [string] $CustomString,
+
+        [Parameter(
+            ParameterSetName = 'New',
+            Mandatory = $false,
+            HelpMessage = 'Select passphrase language'
+        )]
+        [ValidateSet('English', 'Norwegian')]
+        [string]$Language = 'English'
     )
     $ErrorActionPreference = 'Stop'
     $InformationPreference = 'Continue'
@@ -88,7 +96,7 @@
             } else {
                 [array] $Words = . (Join-Path (Split-Path $PSScriptroot) 'private\Passphraser.Words.ps1')
 
-                $PassphraseObject = [PassphraseObject]::new($Words, $AmountOfWords, $Separator)
+                $PassphraseObject = [PassphraseObject]::new($Words.$Language, $AmountOfWords, $Separator)
             }
 
             if ($PSBoundParameters.ContainsKey('IncludeUppercase')) {
