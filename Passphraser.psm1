@@ -2,7 +2,6 @@
 param()
 
 foreach ($folder in @(
-    'classes',
     'scripts\public',
     'scripts\private')) {
         $root = Join-Path -Path $PSScriptRoot -ChildPath $folder
