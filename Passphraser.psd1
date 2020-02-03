@@ -27,9 +27,9 @@
     RequiredAssemblies = @(
         '.\classes\Zxcvbn.dll'
     )
-    # ScriptsToProcess  = @(
-    #     '.\classes\PassphraseObject.Class.ps1'
-    # )
+    ScriptsToProcess  = @(
+        '.\classes\PassphraseObject.Class.ps1'
+    )
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
