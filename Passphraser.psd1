@@ -4,11 +4,11 @@
 
 @{
     RootModule        = 'Passphraser.psm1'
-    ModuleVersion     = '2.0.0'
+    ModuleVersion     = '2.0.1'
     GUID              = 'b40097d7-bc39-4f92-a85d-cc5e39be939a'
     Author            = 'Lage Berger Jensen'
     CompanyName       = ''
-    Copyright         = '(c) 2019 Lage Berger Jensen. All rights reserved.'
+    Copyright         = '(c) 2020 Lage Berger Jensen. All rights reserved.'
     Description       = 'Powershell passphrase generator'
     FunctionsToExport = @(
         'New-Passphrase'
