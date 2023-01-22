@@ -1,3 +1,3 @@
 ﻿#Requires -Modules psake
 
-Invoke-PSake -BuildFile ('{0}\Passphraser.Build.ps1' -f $PSScriptRoot) -taskList 'Build'
+Invoke-PSake -BuildFile ('{0}\Passphraser.Build.ps1' -f $PSScriptRoot) -taskList 'Publish'

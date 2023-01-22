@@ -125,7 +125,7 @@ Properties {
 
     # Enable/disable Pester code coverage reporting.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $CodeCoverageEnabled = $true
+    $CodeCoverageEnabled = $false
 
     # CodeCoverageFiles specifies the files to perform code coverage analysis on. This property
     # acts as a direct input to the Pester -CodeCoverage parameter, so will support constructions
@@ -148,7 +148,7 @@ Properties {
     # Path to the release notes file.  Set to $null if the release notes reside in the manifest file.
     # The contents of this file are used during publishing for the ReleaseNotes parameter.
     [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-    $ReleaseNotesPath = "$ModuleRootDir\ReleaseNotes.md"
+    $ReleaseNotesPath = "$ModuleRootDir\README.md"
 
     # ----------------------- Misc properties ---------------------------------
 
