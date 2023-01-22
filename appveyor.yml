@@ -4,7 +4,7 @@
 image: Visual Studio 2019
 
 # clone directory
-clone_folder: c:\git\Passphraser
+clone_folder: c:\git\lagebj\Passphraser
 
 # Skip on updates to the readme.
 # We can force this by adding [skip ci] or [ci skip] anywhere in commit message 

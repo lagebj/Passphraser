@@ -4,15 +4,13 @@
 
 @{
     RootModule        = 'Passphraser.psm1'
-    ModuleVersion     = '2.0.0'
+    ModuleVersion     = '2.1.0'
     GUID              = 'b40097d7-bc39-4f92-a85d-cc5e39be939a'
     Author            = 'Lage Berger Jensen'
     CompanyName       = ''
-    Copyright         = '(c) 2019 Lage Berger Jensen. All rights reserved.'
+    Copyright         = '(c) 2023 Lage Berger Jensen. All rights reserved.'
     Description       = 'Powershell passphrase generator'
-    FunctionsToExport = @(
-        'New-Passphrase'
-    )
+    FunctionsToExport = @('New-Passphrase')
     CmdletsToExport   = @()
     VariablesToExport = @()
     AliasesToExport   = @()
@@ -24,12 +22,8 @@
     # CLRVersion = ''
     # ProcessorArchitecture = ''
     # RequiredModules = @()
-    RequiredAssemblies = @(
-        '.\classes\Zxcvbn.dll'
-    )
-    ScriptsToProcess  = @(
-        '.\classes\PassphraseObject.Class.ps1'
-    )
+    RequiredAssemblies = @('.\classes\Zxcvbn.dll')
+    ScriptsToProcess  = @('.\classes\PassphraseObject.Class.ps1')
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
@@ -49,7 +43,7 @@
             LicenseUri = 'https://github.com/lagebj/Passphraser/blob/master/LICENSE'
             ProjectUri = 'https://github.com/lagebj/Passphraser'
             # IconUri = ''
-            ReleaseNotes = 'https://github.com/lagebj/Passphraser/blob/master/ReleaseNotes.md'
+            # ReleaseNotes = ''
         }
     }
     # HelpInfoURI = ''

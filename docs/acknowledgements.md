@@ -1,5 +1,5 @@
 Thanks to [Michael Ford](https://github.com/mickford) for his [C# port](https://github.com/mickford/zxcvbn-cs) of [Dan Wheeler](https://github.com/lowe)s [zxcvbn](https://github.com/dropbox/zxcvbn) project.
-I also want to thank everyone that has submitted feedback, ideas and contributions to this project.
+I also want to thank everyone that has submitted feedback, ideas, contributions and reported issues to this project.
 
 ## Lage Berger Jensen
 

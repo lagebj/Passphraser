@@ -1,7 +1,8 @@
-﻿$ModuleRootDir = (Split-Path $PSScriptRoot)
-$ModuleName = Get-Item $ModuleRootDir\*.psd1 |
-        Where-Object { $null -ne (Test-ModuleManifest -Path $_ -ErrorAction SilentlyContinue) } |
-        Select-Object -First 1 |
-        Foreach-Object BaseName
+﻿[string] $ModuleRootDir = Split-Path -Path $PSScriptRoot
+
+[string] $ModuleName = Get-Item -Path ('{0}\*.psd1' -f $ModuleRootDir) |
+    Where-Object -FilterScript {$null -ne (Test-ModuleManifest -Path $PSItem -ErrorAction 'SilentlyContinue')} |
+    Select-Object -First 1 -ExpandProperty 'BaseName'
+
 [System.Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssigments', '')]
-$PassphraserModule = Import-Module "$ModuleRootDir\$ModuleName.psd1" -Scope Global -PassThru
+[System.Management.Automation.PSModuleInfo[]] $PassphraserModule = Import-Module "$ModuleRootDir\$ModuleName.psd1" -Scope Global -PassThru
