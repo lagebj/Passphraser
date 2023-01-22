@@ -1,7 +1,7 @@
 #Requires -Modules psake
 
 ##############################################################################
-# DO NOT MODIFY THIS FILE!  Modify build.settings.ps1 instead.
+# DO NOT MODIFY THIS FILE!  Modify Passphraser.build.settings.ps1 instead.
 ##############################################################################
 
 ##############################################################################
@@ -33,24 +33,24 @@
 # You can exeute a specific task, such as the Test task by running the
 # following command:
 #
-# PS C:\> invoke-psake build.psake.ps1 -taskList Test
+# PS C:\> invoke-psake Passphraser.Build.ps1 -taskList Test
 #
 # You can execute the Publish task with the following command.
 # The first time you execute the Publish task, you will be prompted to enter
 # your PowerShell Gallery NuGetApiKey.  After entering the key, it is encrypted
 # and stored so you will not have to enter it again.
 #
-# PS C:\> invoke-psake build.psake.ps1 -taskList Publish
+# PS C:\> invoke-psake Passphraser.Build.ps1 -taskList Publish
 #
 # You can verify the stored and encrypted NuGetApiKey by running the following
 # command which will display a portion of your NuGetApiKey in plain text.
 #
-# PS C:\> invoke-psake build.psake.ps1 -taskList ShowApiKey
+# PS C:\> invoke-psake Passphraser.Build.ps1 -taskList ShowApiKey
 #
 # You can store a new NuGetApiKey with this command. You can leave off
 # the -properties parameter and you'll be prompted for the key.
 #
-# PS C:\> invoke-psake build.psake.ps1 -taskList StoreApiKey -properties @{NuGetApiKey='test123'}
+# PS C:\> invoke-psake Passphraser.Build.ps1 -taskList StoreApiKey -properties @{NuGetApiKey='test123'}
 #
 
 ###############################################################################

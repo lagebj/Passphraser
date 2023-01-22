@@ -5,7 +5,7 @@
     [ValidateRange(0, 9)]
     [System.Collections.Generic.List[int]] $Numbers = @()
 
-    [ValidatePattern('[!"#$%&()*+,./:;<=>?@\^_{|}]')]
+    [ValidatePattern('[!#%&()*+,./:;<=>@^_{|}]')]
     [System.Collections.Generic.List[char]] $Specials = @()
 
     [ValidateNotNullOrEmpty()]
@@ -17,10 +17,10 @@
 
     PassphraseObject([string[]] $Words) {
         $Words | Get-Random -Count 3 | ForEach-Object {
-            $this.Words.Add($_)
+            $this.Words.Add($PSItem)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
         $this.Separator = ' '
         $this.Length = $PassphraseAsString.Length
@@ -44,35 +44,36 @@
         [string[]] $WordsWithNumbers = $WordsArray -match '\d'
         [int[]] $NumbersFound = $WordsWithNumbers -replace '\D', ''
         $NumbersFound | ForEach-Object {
-            [int[]] (($_ -split '') -ne '') | ForEach-Object {
-                $this.Numbers.Add($_)
+            [int[]] (($PSItem -split '') -ne '') | ForEach-Object {
+                $this.Numbers.Add($PSItem)
             }
         }
         $WordsWithNumbers | ForEach-Object {
-            $WordsArray = $WordsArray.Replace($_, ($_ -replace '\d', ''))
+            [string[]] $WordsArray = $WordsArray.Replace($PSItem, ($PSItem -replace '\d', ''))
         }
 
         [string[]] $WordsWithSpecials = $WordsArray -match '[^A-Za-z0-9]+'
         [string[]] $SpecialsFound = $WordsWithSpecials -replace '[A-Za-z0-9]+'
         $SpecialsFound | ForEach-Object {
-            [char[]] (($_ -split '') -ne '') | ForEach-Object {
-                $this.Specials.Add($_)
+            [char[]] (($PSItem -split '') -ne '') | ForEach-Object {
+                $this.Specials.Add($PSItem)
             }
         }
         $WordsWithSpecials | ForEach-Object {
-            $WordsArray = $WordsArray.Replace($_, ($_ -replace '[^A-Za-z0-9]+', ''))
+            [string[]] $WordsArray = $WordsArray.Replace($PSItem, ($PSItem -replace '[^A-Za-z0-9]+', ''))
         }
 
         [string[]] $WordsUppercase = $WordsArray -cmatch '[A-Z]+'
         $WordsUppercase | ForEach-Object {
-            $WordsArray = $WordsArray.Replace($_, $_.ToLower())
+            [string[]] $WordsArray = $WordsArray.Replace($PSItem, $PSItem.ToLower())
         }
+        
         if ($WordsUppercase) {
             $this.IncludeUppercase = $true
         }
 
         $WordsArray | ForEach-Object {
-            $this.Words.Add($_)
+            $this.Words.Add($PSItem)
         }
 
         [string] $PassphraseAsString = $this.ToString()
@@ -95,7 +96,7 @@
 
     PassphraseObject([string[]] $Words, [int] $AmountOfWords, [char] $Separator) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
-            $this.Words.Add($_)
+            $this.Words.Add($PSItem)
         }
 
         [string] $PassphraseAsString = $this.ToString()
@@ -118,11 +119,10 @@
 
     PassphraseObject([string[]] $Words, [int] $AmountOfWords, [char] $Separator, [int] $AmountOfNumbers, [int] $AmountOfSpecials, [bool] $IncludeUppercase) {
         $Words | Get-Random -Count $AmountOfWords | ForEach-Object {
-            $this.Words.Add($_)
+            $this.Words.Add($PSItem)
         }
 
         $this.AddNumber($AmountOfNumbers)
-
         $this.AddSpecial($AmountOfSpecials)
 
         if ($IncludeUppercase) {
@@ -149,12 +149,12 @@
 
     [void] AddWord([string[]] $Words) {
         $Words | ForEach-Object {
-            $this.Words.Add($_)
+            $this.Words.Add($PSItem)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -175,9 +175,9 @@
             $this.Numbers.Add($Number)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -193,17 +193,17 @@
     }
     
     [void] AddSpecial([int] $AmountOfSpecials) {
-        [char[]] $SpecialCharacters = '!"#$%&()*+,./:;<=>?@\^_{|}'.ToCharArray()
+        [char[]] $SpecialCharacters = '!#%&()*+,./:;<=>@^_{|}'.ToCharArray()
 
         for ($i = 1; $i -le $AmountOfSpecials; $i++) {
-            $Special = $SpecialCharacters | Get-Random
+            [char] $Special = $SpecialCharacters | Get-Random
 
             $this.Specials.Add($Special)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -221,9 +221,9 @@
     [void] AddUppercase() {
         $this.IncludeUppercase = $true
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -240,12 +240,12 @@
 
     [void] RemoveWord([string[]] $Words) {
         $Words | ForEach-Object {
-            $this.Words.Remove($_)
+            $this.Words.Remove($PSItem)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -262,12 +262,12 @@
 
     [void] RemoveNumber([int[]] $Numbers) {
         $Numbers | ForEach-Object {
-            $this.Numbers.Remove($_)
+            $this.Numbers.Remove($PSItem)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -284,12 +284,12 @@
 
     [void] RemoveSpecial([char[]] $Specials) {
         $Specials | ForEach-Object {
-            $this.Specials.Remove($_)
+            $this.Specials.Remove($PSItem)
         }
 
-        $PassphraseAsString = $this.ToString()
+        [string] $PassphraseAsString = $this.ToString()
 
-        [string] $this.Length = $PassphraseAsString.Length
+        $this.Length = $PassphraseAsString.Length
 
         $Zxcvbn = [Zxcvbn.Zxcvbn]::MatchPassword($PassphraseAsString)
 
@@ -325,38 +325,34 @@
     }
 
     [string] ToString() {
-        [string[]] $WordsArray = $this.Words | Sort-Object { Get-Random }
+        [string[]] $WordsArray = $this.Words | Sort-Object {Get-Random}
 
         if ($this.IncludeUppercase) {
             [string] $Word = $WordsArray | Get-Random
 
-            $WordsArray = $WordsArray.Replace($Word, $Word.ToUpper())
+            [string[]] $WordsArray = $WordsArray.Replace($Word, $Word.ToUpper())
         }
         
         foreach ($Num in $this.Numbers) {
             [string] $Word = $WordsArray | Get-Random
 
-            [int] $Placement = @(
-                0,
-                $Word.Length) | Get-Random
+            [int] $Placement = @(0, $Word.Length) | Get-Random
 
             [string] $WordWithNumber = $Word.Insert($Placement, $Num)
 
-            $WordsArray = $WordsArray.Replace($Word, $WordWithNumber)
+            [string[]] $WordsArray = $WordsArray.Replace($Word, $WordWithNumber)
         }
 
         foreach ($Char in $this.Specials) {
             [string] $Word = $WordsArray | Get-Random
 
-            [int] $Placement = @(
-                0,
-                $Word.Length) | Get-Random
+            [int] $Placement = @(0, $Word.Length) | Get-Random
 
             [string] $WordWithSpecial = $Word.Insert($Placement, $Char)
 
-            $WordsArray = $WordsArray.Replace($Word, $WordWithSpecial)
+            [string[]] $WordsArray = $WordsArray.Replace($Word, $WordWithSpecial)
         }
 
-        return $WordsArray -join $this.Separator
+        return ($WordsArray -join $this.Separator)
     }
 }

@@ -1,8 +1,6 @@
-$ModuleManifestName = 'Passphraser.psd1'
-$ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
-
 Describe 'Module Manifest Tests' {
     It 'Passes Test-ModuleManifest' {
+        [string] $ModuleManifestPath = '{0}\..\Passphraser.psd1' -f $PSScriptRoot
         Test-ModuleManifest -Path $ModuleManifestPath | Should -Not -BeNullOrEmpty
         $? | Should -Be $true
     }

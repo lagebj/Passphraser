@@ -1,18 +1,12 @@
 ﻿[cmdletbinding()]
-param()
+Param()
 
-foreach ($folder in @(
-    'scripts\public',
-    'scripts\private')) {
-        $root = Join-Path -Path $PSScriptRoot -ChildPath $folder
-        if (Test-Path -Path $root) {
-            $files = Get-ChildItem -Path $root -Filter *.ps1 -Recurse
-            $files | Where-Object {
-                $_.name -NotLike '*.Tests.ps1'
-            } | ForEach-Object {
-                . $_.FullName
-            }
-        }
+foreach ($Folder in @('scripts\public', 'scripts\private')) {
+    [string] $Root = '{0}\{1}' -f $PSScriptRoot, $Folder
+    if (Test-Path -Path $Root) {
+        [System.IO.FileInfo[]] $Files = Get-ChildItem -Path $Root -Filter '*.ps1' -Recurse
+        $Files | Where-Object {$PSItem.Name -NotLike '*.Tests.ps1'} | ForEach-Object {. $PSItem.FullName}
     }
+}
 
-Export-ModuleMember -Function (Get-ChildItem -Path "$PSScriptRoot\scripts\public\*.ps1").basename
+Export-ModuleMember -Function (Get-ChildItem -Path ('{0}\scripts\public\*.ps1' -f $PSScriptRoot)).BaseName
