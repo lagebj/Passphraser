@@ -47,7 +47,7 @@
                 if ($PSBoundParameters.ContainsKey('CustomString')) {
                     [PassphraseObject] $PassphraseObject = [PassphraseObject]::new($CustomString, $Separator)
                 } else {
-                    [string[]] $Words = Get-Content -Path ('{0}\private\Passphraser.Words.txt' -f $PSScriptroot)
+                    [string[]] $Words = Get-Content -Path ('{0}\..\private\Passphraser.Words.txt' -f $PSScriptroot)
 
                     [PassphraseObject] $PassphraseObject = [PassphraseObject]::new($Words, $AmountOfWords, $Separator)
                 }
